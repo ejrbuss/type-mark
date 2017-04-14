@@ -1,0 +1,19 @@
+{
+  "name": "type-checker",
+  "version": "1.0.0",
+  "description": "A small library for checking types",
+  "main": "type-checker.js",
+  "scripts": {
+    "test": "mocha test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ejrbuss/type-checker.git"
+  },
+  "author": "Eric Buss <ejrbuss@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/ejrbuss/type-checker/issues"
+  },
+  "homepage": "https://github.com/ejrbuss/type-checker#readme"
+}

@@ -26,13 +26,13 @@ Not to mention the added benifits of [modifiers](#modifiers), [interfaces](#inte
 
 ### Considerations
 
-type-mark is a dependecy free library clocking in at about ~10kb. In terms of
-browsers it adheres to javascript features made available according to the
-following [MDN table](https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_Objects/Object/defineProperty)
+type-mark is a dependecy free library clocking in at about ~10kb. In terms
+of browser combatibility you will be safe in the following browser
+versions based on [MDN](https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_Objects/Object/defineProperty).
 
-| Feature | Firefox (Gecko) | Chrome | Internet Explorer | Opera | Safari |
+| Firefox (Gecko) | Chrome | Internet Explorer | Opera | Safari |
 | ------- | --------------- | ------ | ----------------- | ----- | ------ |
-| Basic support | 4.0 (2) | 5 | 9 | 11.60 | 5.1
+| 4.0 (2) | 5 | 9 | 11.60 | 5.1
 
 ### Installing
 

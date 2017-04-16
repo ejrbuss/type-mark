@@ -30,5 +30,5 @@ exclude:
   - Gemfile
   - Gemfile.lock
 
-version: 1.0.0
+version: 1.0.2
 cdn: https://cdn.rawgit.com/ejrbuss/type-mark/77aa2923/type-mark.min.js

@@ -8,7 +8,7 @@ var util = {
      * @param   {function} fn the function to not
      * @returns {function}    the notted function
      */
-    not(fn) {
+    not : function(fn) {
         return function() {
             var result = fn.apply(this, arguments);
             if(typeof result !== 'function') {
@@ -26,7 +26,7 @@ var util = {
      * @param   {function} fn the function to array reduce
      * @returns {function}     the array reduced function
      */
-    arrayof(fn) {
+    arrayof : function(fn) {
         return function() {
 
             var that   = this;
@@ -51,7 +51,7 @@ var util = {
      * @param   {function} fn the function to array reduce
      * @returns {function}     the object reduced function
      */
-    of(fn) {
+    of : function(fn) {
         return function() {
 
             var that   = this;
@@ -76,7 +76,7 @@ var util = {
      * @param   {function} fn   the property function
      * @returns {object}        the util object for chaining
      */
-    define(obj, name, fn) {
+    define : function(obj, name, fn) {
         Object.defineProperty(obj, name, {
             get : fn
         });
@@ -89,7 +89,7 @@ var util = {
      * @param   {mixed} arg the value to get the length of
      * @returns {mixed}     the length if applicable or null
      */
-    length(arg) {
+    length : function(arg) {
         if(typeof arg === 'string' || Array.isArray(arg)) {
             return arg.length;
         }
@@ -100,7 +100,7 @@ var util = {
     },
 
     // http://blog.carbonfive.com/2015/01/14/gettin-freaky-functional-wcurried-javascript/
-    curry(fn) {
+    curry : function(fn) {
         var arity = fn.length;
         return function f1() {
             var args = Array.prototype.slice.call(arguments, 0);

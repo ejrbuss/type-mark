@@ -4,8 +4,10 @@
   "description": "A small library for checking types",
   "main": "type-checker.js",
   "scripts": {
+    "build": "browserify ./src/index.js > type-checker.js && uglifyjs --compress --mangle --output type-checker.min.js -- type-checker.js",
     "test": "nyc mocha --timeout=10000 --recursive test --bail",
-    "coverage": "nyc --reporter=html mocha --timout=10000 --recursive test"
+    "coverage": "nyc --reporter=html mocha --timout=10000 --recursive test",
+    "site": "cd docs && bundle exec jekyll serve"
   },
   "repository": {
     "type": "git",

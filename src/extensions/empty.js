@@ -5,7 +5,6 @@ var util = require('../util');
 type.extend('empty', function(arg) {
     return util.length(arg) === 0;
 }, function(arg) {
-    var length;
     if(typeof arg === 'string' || Array.isArray(arg)) {
         return arg.length === 0;
     }

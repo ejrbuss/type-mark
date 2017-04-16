@@ -6,8 +6,8 @@ var util = require('./util');
  * @param   {...}       value one or more values to be tested
  * @returns {TypeState}       new TypeState object
  */
-function type(...val) {
-    return new TypeState(val);
+function type() {
+    return new TypeState(arguments);
 }
 
 /**
@@ -37,7 +37,7 @@ TypeState.prototype = {
      * @param   {string}   message the error message function (optional)
      * @returns {mixed}
      */
-    _resolve(name, test, message) {
+    _resolve : function(name, test, message) {
 
         var result = false;
         var state  = this;
@@ -108,7 +108,7 @@ TypeState.prototype = {
      * @param   {function}  message set a custom error message function
      * @returns {TypeState}         this for chaining
      */
-    message(msg) {
+    message : function(msg) {
         type(msg).assert.function;
         this._message = msg;
         return this;
@@ -124,7 +124,7 @@ TypeState.prototype = {
      * @param   {boolean}  undef    true if arg is undefined (optional)
      * @returns {boolean}           true or false result
      */
-    result(test, arg, undef) {
+    result : function(test, arg, undef) {
         arg = typeof arg !== 'undefined' || undef ? arg : this.value
         return test.apply(this, this._args.concat([arg]));
     }

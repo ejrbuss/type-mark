@@ -6,5 +6,5 @@ type.extendfn('instanceof', function(constructor, arg) {
     type(constructor).assert.function;
     return arg instanceof constructor;
 }, function(constructor, arg) {
-    return 'Expected instanceof ' + constructor.name + ' instead found ' + arg;
+    return 'Expected instance of ' + constructor.name + ' instead found ' + arg;
 });

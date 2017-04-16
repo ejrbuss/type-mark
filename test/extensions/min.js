@@ -20,4 +20,10 @@ describe('.min()', function() {
         'max'       : false,
         'min'       : true
     });
+
+    it('should have an error message specifying the minimum value', function() {
+        assert.throws(function() {
+            type(-101).assert.min(0);
+        }, /TypeError: Expected a value greater than or equal to 0 instead found -101/);
+    });
 });

@@ -21,4 +21,10 @@ describe('.instanceof()', function() {
         'instance'    : true,
         'notInstance' : false
     });
+
+    it('should have an error message specifying the instance', function() {
+        assert.throws(function() {
+            type({}).assert.instanceof(RegExp);
+        }, /TypeError: Expected instance of RegExp instead found \[object Object\]/);
+    });
 });

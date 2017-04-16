@@ -20,4 +20,10 @@ describe('.max()', function() {
         'max'       : true,
         'min'       : false
     });
+
+    it('should have an error message specifying the maximum value', function() {
+        assert.throws(function() {
+            type(112).assert.max(99);
+        }, /TypeError: Expected a value less than or equal to 99 instead found 112/);
+    });
 });

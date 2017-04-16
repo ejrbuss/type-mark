@@ -61,9 +61,6 @@ function helper(test, mapping) {
         // Check assert.test
         valueSet.forEach(function(value) {
             assert.throws(function() {
-                console.log(name + ' for ' + test);
-                console.log(' - for ' + JSON.stringify(value) + ' we expect ' + result);
-                console.log(' - get ' + !!type(value)[test]);
                 result ? type(value).not.assert[test] : type(value).assert[test];
             }, TypeError);
         });

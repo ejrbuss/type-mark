@@ -151,12 +151,12 @@ describe('type-checker', function() {
                 }, TypeError, 'Expected instead found undefined');
             });
             it('should throw a TypeError with a specified message', function() {
-                var ts = type().assert.message('test');
+                var ts = type(42).assert.message(function(arg) { return arg; });
                 assert.throws(function() {
                     ts._resolve('', function(arg) {
                         return false;
                     });
-                }, TypeError, 'test');
+                }, /TypeError: 42/);
             });
             it('should throw a TypeError with a passed message', function() {
                 var ts = type('test').assert;
@@ -166,17 +166,18 @@ describe('type-checker', function() {
                     }, function(arg) {
                         return arg;
                     });
-                }, TypeError, 'test');
+                }, /TypeError: test/);
             });
         });
         describe('.message()', function() {
             it('should set ._message', function() {
-                var ts = type().message('test');
-                assert.strictEqual(ts._message, 'test');
+                var fn = function() { return 'test'; };
+                var ts = type().message(fn);
+                assert.strictEqual(ts._message, fn);
             });
             it('should return itself', function() {
                 var ts = type();
-                assert.strictEqual(ts.message('test'), ts);
+                assert.strictEqual(ts.message(function() {}), ts);
             })
         });
         describe('.result()', function() {
@@ -259,7 +260,7 @@ describe('type-checker', function() {
             var ts = type(false).assert;
             assert.throws(function() {
                 ts.test;
-            }, TypeError, 'test!');
+            }, /TypeError: test!/);
         });
     });
     describe('extendfn()', function() {
@@ -315,7 +316,7 @@ describe('type-checker', function() {
             var ts = type(true).assert;
             assert.throws(function() {
                 ts.testfn(type.test, false);
-            }, TypeError, 'test!');
+            }, /TypeError: testfn!/);
         });
     });
 

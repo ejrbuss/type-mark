@@ -20,4 +20,10 @@ describe('.lengthof()', function() {
         'lengthof'    : true,
         'notLengthof' : false
     });
+
+    it('should have an error message specifying the correct length', function() {
+        assert.throws(function() {
+            type([1, 2, 3]).assert.lengthof(12);
+        }, /TypeError: Expected an object of length 12 instead found object of length 3/);
+    });
 });

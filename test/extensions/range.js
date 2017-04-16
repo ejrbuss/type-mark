@@ -20,4 +20,10 @@ describe('.range()', function() {
         'range'     : true,
         'notRange'  : false
     });
+
+    it('should have an error message specifying the range', function() {
+        assert.throws(function() {
+            type(12).assert.range(0, 10);
+        }, /TypeError: Expected a value between 0 and 10 instead found 12/);
+    });
 });

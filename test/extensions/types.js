@@ -25,4 +25,3 @@ testType('undefined');
 testType('boolean');
 testType('number');
 testType('function');
-testType('symbol');

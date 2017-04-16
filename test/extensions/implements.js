@@ -68,4 +68,10 @@ describe('.implements', function() {
         'interface'    : true,
         'notInterface' : false
     });
+
+    it('should have an error message specifying the interface and object', function() {
+        assert.throws(function() {
+            type({}).assert.implements({ a : type.array });
+        }, /TypeError: \[object Object\] fails to implement interface/);
+    });
 });

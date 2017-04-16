@@ -88,8 +88,7 @@ TypeState.prototype = {
         // Handle assert
         if(!result && (state._flags & modifiers.assert)) {
              var error = new TypeError(
-                state._message ||
-                state.result(message || function() {}) ||
+                state.result(state._message || message || function() {}) ||
                 'Expected ' + name + ' instead found ' + state.type
             );
             if(!(state._flags & modifiers.debug) && type(error.stack).string) {
@@ -106,11 +105,11 @@ TypeState.prototype = {
     /**
      * Sets a custom error message used with assertions during  test resolution.
      *
-     * @param   {string}    message set a custom error message
+     * @param   {function}  message set a custom error message function
      * @returns {TypeState}         this for chaining
      */
     message(msg) {
-        type(msg).assert.string;
+        type(msg).assert.function;
         this._message = msg;
         return this;
     },

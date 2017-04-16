@@ -4,7 +4,8 @@
   "description": "A small library for checking types",
   "main": "type-checker.js",
   "scripts": {
-    "test": "mocha test"
+    "test": "nyc mocha --timeout=10000 --recursive test --bail",
+    "coverage": "nyc --reporter=html mocha --timout=10000 --recursive test"
   },
   "repository": {
     "type": "git",
@@ -15,5 +16,11 @@
   "bugs": {
     "url": "https://github.com/ejrbuss/type-checker/issues"
   },
-  "homepage": "https://github.com/ejrbuss/type-checker#readme"
+  "homepage": "https://github.com/ejrbuss/type-checker#readme",
+  "devDependencies": {
+    "browserify": "^14.3.0",
+    "istanbul": "^0.4.5",
+    "mocha": "^3.2.0",
+    "nyc": "^10.2.0"
+  }
 }

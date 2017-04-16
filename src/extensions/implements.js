@@ -13,6 +13,6 @@ function implements(interface, arg) {
 }
 
 // Extension code
-type.extendfn('implements', implements, function(interface, ag) {
-    return arg + ' fails to implement ' + interface;
+type.extendfn('implements', implements, function(interface, arg) {
+    return arg + ' fails to implement interface';
 });

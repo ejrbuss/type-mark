@@ -31,4 +31,4 @@ exclude:
   - Gemfile.lock
 
 version: 1.0.0
-cdn: https://cdn.rawgit.com/ejrbuss/type-mark/1b56e9e1/type-mark.min.js
+cdn: https://cdn.rawgit.com/ejrbuss/type-mark/77aa2923/type-mark.min.js

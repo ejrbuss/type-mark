@@ -1,5 +1,5 @@
 var assert = require('assert');
-var type   = require('../src/type-checker');
+var type   = require('../src/type-mark');
 
 function helper(test, mapping) {
 

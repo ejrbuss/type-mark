@@ -1,4 +1,4 @@
-var type = require('../type-checker');
+var type = require('../type-mark');
 require('./types');
 require('./object');
 

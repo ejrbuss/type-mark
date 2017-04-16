@@ -17,4 +17,9 @@ require('./extensions/max');
 require('./extensions/range');
 require('./extensions/implements');
 
-(window || global).type = require('./type-checker');
+var type = require('./type-mark');
+
+if(window) {
+    window.type = type;
+}
+module.exports = type;

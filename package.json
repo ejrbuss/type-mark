@@ -1,24 +1,24 @@
 {
-  "name": "type-checker",
+  "name": "type-mark",
   "version": "1.0.0",
   "description": "A small library for checking types",
-  "main": "type-checker.js",
+  "main": "src/index.js",
   "scripts": {
-    "build": "browserify ./src/index.js > type-checker.js && uglifyjs --compress --mangle --output type-checker.min.js -- type-checker.js",
+    "build": "browserify ./src/index.js > type-mark.js && uglifyjs --compress --mangle --output type-mark.min.js -- type-mark.js",
     "test": "nyc mocha --timeout=10000 --recursive test --bail",
     "coverage": "nyc --reporter=html mocha --timout=10000 --recursive test",
     "site": "cd docs && bundle exec jekyll serve"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/ejrbuss/type-checker.git"
+    "url": "git+https://github.com/ejrbuss/type-mark.git"
   },
   "author": "Eric Buss <ejrbuss@gmail.com>",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/ejrbuss/type-checker/issues"
+    "url": "https://github.com/ejrbuss/type-mark/issues"
   },
-  "homepage": "https://github.com/ejrbuss/type-checker#readme",
+  "homepage": "https://github.com/ejrbuss/type-mark#readme",
   "devDependencies": {
     "browserify": "^14.3.0",
     "istanbul": "^0.4.5",

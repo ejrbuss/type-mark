@@ -2,6 +2,10 @@
 
 A small JavaScript library for type checking.
 
+# WIP
+
+**Not ready to be used.**
+
 ## Specification
 
 ### Type Checks

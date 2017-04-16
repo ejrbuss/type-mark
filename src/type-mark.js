@@ -7,7 +7,7 @@ var util = require('./util');
  * @returns {TypeState}       new TypeState object
  */
 function type() {
-    return new TypeState(arguments);
+    return new TypeState(Array.prototype.slice.call(arguments));
 }
 
 /**

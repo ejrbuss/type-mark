@@ -1,6 +1,6 @@
 var assert = require('assert');
 var helper = require('../helper');
-var type   = require('../../src/type-checker');
+var type   = require('../../src/type-mark');
 require('../../src/extensions/types');
 require('../../src/extensions/array');
 require('../../src/extensions/implements');

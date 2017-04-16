@@ -1,4 +1,4 @@
-var type = require('../type-checker');
+var type = require('../type-mark');
 
 // Define base types
 'undefined boolean number string symbol function'

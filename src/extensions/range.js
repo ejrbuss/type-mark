@@ -1,4 +1,4 @@
-var type = require('../type-checker');
+var type = require('../type-mark');
 
 type.extendfn('range', function(min, max, arg) {
     type(min).assert.number;

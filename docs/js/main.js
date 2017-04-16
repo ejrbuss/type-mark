@@ -9,7 +9,9 @@ $(document).ready(function() {
         var lang  = $this
             .attr('class')
             .replace(/hljs|\s/g, '')
+            .replace(/xml/i, 'html')
             .replace(/javascript/i, 'js');
+
         $this
             .parent()
             .addClass('code')

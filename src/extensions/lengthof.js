@@ -1,4 +1,4 @@
-var type = require('../type-checker');
+var type = require('../type-mark');
 var util = require('../util');
 
 // Extension code

@@ -1,4 +1,4 @@
-var type = require('../type-checker');
+var type = require('../type-mark');
 
 // Extension code
 type.extend('negative', function(arg) {

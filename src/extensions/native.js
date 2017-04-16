@@ -1,4 +1,4 @@
-var type = require('../type-checker');
+var type = require('../type-mark');
 
 /* Taken from lodash */
 /* https://github.com/lodash/lodash/blob/6cb3460fcefe66cb96e55b82c6febd2153c992cc/isNative.js */

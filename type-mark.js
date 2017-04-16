@@ -1,10 +1,10 @@
 (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
-var type = require('../type-checker');
+var type = require('../type-mark');
 
 // Extension code
 type.extend('array', Array.isArray);
-},{"../type-checker":20}],2:[function(require,module,exports){
-var type = require('../type-checker');
+},{"../type-mark":20}],2:[function(require,module,exports){
+var type = require('../type-mark');
 var util = require('../util');
 
 // Extension code
@@ -21,8 +21,8 @@ type.extend('empty', function(arg) {
 });
 
 
-},{"../type-checker":20,"../util":21}],3:[function(require,module,exports){
-var type = require('../type-checker');
+},{"../type-mark":20,"../util":21}],3:[function(require,module,exports){
+var type = require('../type-mark');
 
 // Extension code
 type.extend('even', function(arg) {
@@ -30,8 +30,8 @@ type.extend('even', function(arg) {
 }, function(arg) {
     return 'Expected an even number instead found ' + arg;
 });
-},{"../type-checker":20}],4:[function(require,module,exports){
-var type = require('../type-checker');
+},{"../type-mark":20}],4:[function(require,module,exports){
+var type = require('../type-mark');
 
 // Extension code
 type.extend('exists', function(arg) {
@@ -39,8 +39,8 @@ type.extend('exists', function(arg) {
 }, function() {
     return 'Expected value to exsist.';
 });
-},{"../type-checker":20}],5:[function(require,module,exports){
-var type = require('../type-checker');
+},{"../type-mark":20}],5:[function(require,module,exports){
+var type = require('../type-mark');
 require('./types');
 require('./object');
 
@@ -58,8 +58,8 @@ function implements(interface, arg) {
 type.extendfn('implements', implements, function(interface, arg) {
     return arg + ' fails to implement interface';
 });
-},{"../type-checker":20,"./object":13,"./types":17}],6:[function(require,module,exports){
-var type = require('../type-checker');
+},{"../type-mark":20,"./object":13,"./types":17}],6:[function(require,module,exports){
+var type = require('../type-mark');
 require('./types');
 
 // Extension code
@@ -69,8 +69,8 @@ type.extendfn('instanceof', function(constructor, arg) {
 }, function(constructor, arg) {
     return 'Expected instance of ' + constructor.name + ' instead found ' + arg;
 });
-},{"../type-checker":20,"./types":17}],7:[function(require,module,exports){
-var type = require('../type-checker');
+},{"../type-mark":20,"./types":17}],7:[function(require,module,exports){
+var type = require('../type-mark');
 
 // Extension code
 type.extend('integer', function(arg) {
@@ -78,8 +78,8 @@ type.extend('integer', function(arg) {
 }, function(value) {
     return 'Expected an integer instead found ' + value;
 });
-},{"../type-checker":20}],8:[function(require,module,exports){
-var type = require('../type-checker');
+},{"../type-mark":20}],8:[function(require,module,exports){
+var type = require('../type-mark');
 var util = require('../util');
 
 // Extension code
@@ -89,8 +89,8 @@ type.extendfn('lengthof', function(n, arg) {
 }, function(n, arg) {
     return 'Expected an object of length ' + n + ' instead found object of length ' + util.length(arg);
 });
-},{"../type-checker":20,"../util":21}],9:[function(require,module,exports){
-var type = require('../type-checker');
+},{"../type-mark":20,"../util":21}],9:[function(require,module,exports){
+var type = require('../type-mark');
 require('./types');
 
 // Extension code
@@ -100,8 +100,8 @@ type.extendfn('max', function(n, arg) {
 }, function(n, arg) {
     return 'Expected a value less than or equal to ' + n + ' instead found ' + arg;
 });
-},{"../type-checker":20,"./types":17}],10:[function(require,module,exports){
-var type = require('../type-checker');
+},{"../type-mark":20,"./types":17}],10:[function(require,module,exports){
+var type = require('../type-mark');
 require('./types');
 
 // Extension code
@@ -111,8 +111,8 @@ type.extendfn('min', function(n, arg) {
 }, function(n, arg) {
     return 'Expected a value greater than or equal to ' + n + ' instead found ' + arg;
 });
-},{"../type-checker":20,"./types":17}],11:[function(require,module,exports){
-var type = require('../type-checker');
+},{"../type-mark":20,"./types":17}],11:[function(require,module,exports){
+var type = require('../type-mark');
 
 /* Taken from lodash */
 /* https://github.com/lodash/lodash/blob/6cb3460fcefe66cb96e55b82c6febd2153c992cc/isNative.js */
@@ -134,8 +134,8 @@ type.extend('native', function(arg) {
 }, function(value) {
     return 'Expected a native function instead found ' + value;
 });
-},{"../type-checker":20}],12:[function(require,module,exports){
-var type = require('../type-checker');
+},{"../type-mark":20}],12:[function(require,module,exports){
+var type = require('../type-mark');
 
 // Extension code
 type.extend('negative', function(arg) {
@@ -143,8 +143,8 @@ type.extend('negative', function(arg) {
 }, function(value) {
     return 'Expected a number less than 0 instead found ' + value;
 });
-},{"../type-checker":20}],13:[function(require,module,exports){
-var type = require('../type-checker');
+},{"../type-mark":20}],13:[function(require,module,exports){
+var type = require('../type-mark');
 
 // Extension code
 type.extend('object', function(arg) {
@@ -152,8 +152,8 @@ type.extend('object', function(arg) {
 }, function(value) {
     return 'Expected an object instead found ' + this.type;
 });
-},{"../type-checker":20}],14:[function(require,module,exports){
-var type = require('../type-checker');
+},{"../type-mark":20}],14:[function(require,module,exports){
+var type = require('../type-mark');
 
 // Extension code
 type.extend('odd', function(arg) {
@@ -161,8 +161,8 @@ type.extend('odd', function(arg) {
 }, function(value) {
     return 'Expected an odd number instaed found ' + value;
 });
-},{"../type-checker":20}],15:[function(require,module,exports){
-var type = require('../type-checker');
+},{"../type-mark":20}],15:[function(require,module,exports){
+var type = require('../type-mark');
 
 // Extension code
 type.extend('positive', function(arg) {
@@ -170,8 +170,8 @@ type.extend('positive', function(arg) {
 }, function(value) {
     return 'Expected a number greater than 0 instead found ' + value;
 });
-},{"../type-checker":20}],16:[function(require,module,exports){
-var type = require('../type-checker');
+},{"../type-mark":20}],16:[function(require,module,exports){
+var type = require('../type-mark');
 
 type.extendfn('range', function(min, max, arg) {
     type(min).assert.number;
@@ -180,8 +180,8 @@ type.extendfn('range', function(min, max, arg) {
 }, function(min, max, arg) {
     return 'Expected a value between ' + min + ' and ' + max + ' instead found ' + arg;
 });
-},{"../type-checker":20}],17:[function(require,module,exports){
-var type = require('../type-checker');
+},{"../type-mark":20}],17:[function(require,module,exports){
+var type = require('../type-mark');
 
 // Define base types
 'undefined boolean number string symbol function'
@@ -191,8 +191,7 @@ var type = require('../type-checker');
             return typeof arg === name;
         });
     });
-},{"../type-checker":20}],18:[function(require,module,exports){
-(function (global){
+},{"../type-mark":20}],18:[function(require,module,exports){
 require('./polyfills')
 require('./extensions/types');
 require('./extensions/array');
@@ -212,9 +211,13 @@ require('./extensions/max');
 require('./extensions/range');
 require('./extensions/implements');
 
-(window || global).type = require('./type-checker');
-}).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"./extensions/array":1,"./extensions/empty":2,"./extensions/even":3,"./extensions/exists":4,"./extensions/implements":5,"./extensions/instanceof":6,"./extensions/integer":7,"./extensions/lengthof":8,"./extensions/max":9,"./extensions/min":10,"./extensions/native":11,"./extensions/negative":12,"./extensions/object":13,"./extensions/odd":14,"./extensions/positive":15,"./extensions/range":16,"./extensions/types":17,"./polyfills":19,"./type-checker":20}],19:[function(require,module,exports){
+var type = require('./type-mark');
+
+if(window) {
+    window.type = type;
+}
+module.exports = type;
+},{"./extensions/array":1,"./extensions/empty":2,"./extensions/even":3,"./extensions/exists":4,"./extensions/implements":5,"./extensions/instanceof":6,"./extensions/integer":7,"./extensions/lengthof":8,"./extensions/max":9,"./extensions/min":10,"./extensions/native":11,"./extensions/negative":12,"./extensions/object":13,"./extensions/odd":14,"./extensions/positive":15,"./extensions/range":16,"./extensions/types":17,"./polyfills":19,"./type-mark":20}],19:[function(require,module,exports){
 // Reference: http://es5.github.io/#x15.4.4.18
 if (!Array.prototype.forEach) {
 
@@ -440,7 +443,7 @@ var util = require('./util');
  * @returns {TypeState}       new TypeState object
  */
 function type() {
-    return new TypeState(arguments);
+    return new TypeState(Array.prototype.slice.call(arguments));
 }
 
 /**

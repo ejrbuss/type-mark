@@ -1,7 +1,17 @@
 var type = require('../type-checker');
+var util = require('../util');
 
+// Extension code
 type.extend('empty', function(arg) {
-    return (typeof arg === 'object' || typeof arg === 'string') && Object.keys(arg).length === 0;
+    return util.length(arg) === 0;
 }, function(arg) {
-    return 'Expected an empty object instead found object with length ' + Object.keys(arg).length;
+    var length;
+    if(typeof arg === 'string' || Array.isArray(arg)) {
+        return arg.length === 0;
+    }
+    if(arg !== null && typeof arg === 'object') {
+        return Object.keys(arg).length === 0;
+    }
+    return 'Expected an empty object instead found object with length ' + util.length(arg);
 });
+

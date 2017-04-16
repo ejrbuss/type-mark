@@ -10,6 +10,7 @@ var reIsNative = RegExp('^' +
         .replace(/hasOwnProperty|(function).*?(?=\\\()| for .+?(?=\\\])/g, '$1.*?')
 );
 
+// Extension code
 type.extend('native', function(arg) {
     return (typeof arg === 'function' || typeof arg === 'object')
         && (typeof arg === 'function'
@@ -17,5 +18,5 @@ type.extend('native', function(arg) {
             : reIsHostCtor.test('' + arg)
         );
 }, function(value) {
-    return 'Expected a native function instaed found ' + value;
+    return 'Expected a native function instead found ' + value;
 });

@@ -1,3 +1,4 @@
+require('./polyfills')
 require('./extensions/types');
 require('./extensions/array');
 require('./extensions/object');

@@ -1,8 +1,10 @@
 var type = require('../type-checker');
+require('./types');
 
-type.extendfn('min', function(arg, n) {
+// Extension code
+type.extendfn('min', function(n, arg) {
     type(n).assert.number;
     return typeof arg === 'number' && arg >= n;
-}, function(value, args) {
-    return 'Expected at least ' + args[0] + ' instead found ' + value;
+}, function(n, arg) {
+    return 'Expected at least ' + n + ' instead found ' + arg;
 });

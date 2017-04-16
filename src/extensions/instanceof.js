@@ -1,11 +1,10 @@
 var type = require('../type-checker');
+require('./types');
 
-type.extendfn('instanceof', function(arg, constructor) {
-
+// Extension code
+type.extendfn('instanceof', function(constructor, arg) {
     type(constructor).assert.function;
-    type(constructor.name).assert.string;
-
     return arg instanceof constructor;
-}, function(value, args) {
-    return 'Expected instanceof ' + args[0].name + ' instead found ' + value;
+}, function(constructor, arg) {
+    return 'Expected instanceof ' + constructor.name + ' instead found ' + arg;
 });

@@ -1,21 +1,18 @@
 var type = require('../type-checker');
+require('./types');
+require('./object');
 
-type.extendfn('implements', function(arg, interface) {
-
-    type(interface).assert.object;
-
-    var state = this;
-
-    if(type(interface).instanceof(type.TypeState)) {
-        return Object.keys(interface.value).every(function(name) {
-            return arg.hasOwnProperty(name) && interface.value[name].apply(state, state.args(arg[name]));
-        });
-    } else {
-        return Object.keys(interface).every(function(name) {
-            return arg.hasOwnProperty(name);
-        });
+function implements(interface, arg) {
+    if(type(interface).function) {
+        return interface.apply(this, [arg]);
     }
+    type(interface).assert.object;
+    return Object.keys(interface).every(function(key) {
+        return type(arg).object && implements(interface[key], arg[key]);
+    });
+}
 
-}, function(arg, interface) {
-    return arg + ' fails to implement the interface ' + interface
+// Extension code
+type.extendfn('implements', implements, function(interface, ag) {
+    return arg + ' fails to implement ' + interface;
 });

@@ -94,3 +94,27 @@ type.extendfn('equals', function(value) {
 
 type(x).equals(value)
 ```
+
+```
+TypeState.prototype.on = function(arg, ...patterns) {
+    for(var i = 0, j = 1; j < patterns.length; i += 2, j += 2) {
+        var condition = patterns[i];
+        var fn        = patterns[j];
+        if(condition(arg)) {
+            return fn();
+        }
+    }
+    return false;
+};
+
+let match = function(arg) {
+    return function(...patterns) {
+        return type(arg).on(...patterns);
+    }
+}
+
+match(x)(
+    type.string, console.log,
+    type.number, console.err
+);
+```

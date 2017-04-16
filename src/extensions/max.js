@@ -1,8 +1,10 @@
 var type = require('../type-checker');
+require('./types');
 
-type.extendfn('max', function(arg, n) {
+// Extension code
+type.extendfn('max', function(n, arg) {
     type(n).assert.number;
     return typeof arg === 'number' && arg <= n;
-}, function(value, args) {
-    return 'Expected no more than ' + args[0] + ' instaed found ' + value;
+}, function(n, arg) {
+    return 'Expected no more than ' + n + ' instaed found ' + arg;
 });

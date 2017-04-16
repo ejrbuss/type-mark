@@ -1,8 +1,10 @@
 var type = require('../type-checker');
+var util = require('../util');
 
-type.extendfn('lengthof', function(arg, n) {
+// Extension code
+type.extendfn('lengthof', function(n, arg) {
     type(n).assert.number;
-    return Object.keys(arg).length === n;
-}, function(value, args) {
-    return 'Expected an object of length ' + args[0] + ' instead found object with length ' + Object.keys(value).length;
+    return util.length(arg) === n;
+}, function(n, args) {
+    return 'Expected an object of length ' + n + ' instead found object with length ' + util.length(arg);
 });

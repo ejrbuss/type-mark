@@ -19,7 +19,7 @@ require('./extensions/implements');
 
 var type = require('./type-mark');
 
-if(window) {
+if(typeof window !== 'undefined' && typeof require === 'undefiend') {
     window.type = type;
 }
 module.exports = type;

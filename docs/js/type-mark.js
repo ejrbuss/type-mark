@@ -1,4 +1,4 @@
-(function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
+(function(f){if(typeof exports==="object"&&typeof module!=="undefined"){module.exports=f()}else if(typeof define==="function"&&define.amd){define([],f)}else{var g;if(typeof window!=="undefined"){g=window}else if(typeof global!=="undefined"){g=global}else if(typeof self!=="undefined"){g=self}else{g=this}g.type = f()}})(function(){var define,module,exports;return (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
 var type = require('../type-mark');
 
 // Extension code
@@ -213,9 +213,6 @@ require('./extensions/implements');
 
 var type = require('./type-mark');
 
-if(typeof window !== 'undefined' && typeof require === 'undefiend') {
-    window.type = type;
-}
 module.exports = type;
 },{"./extensions/array":1,"./extensions/empty":2,"./extensions/even":3,"./extensions/exists":4,"./extensions/implements":5,"./extensions/instanceof":6,"./extensions/integer":7,"./extensions/lengthof":8,"./extensions/max":9,"./extensions/min":10,"./extensions/native":11,"./extensions/negative":12,"./extensions/object":13,"./extensions/odd":14,"./extensions/positive":15,"./extensions/range":16,"./extensions/types":17,"./polyfills":19,"./type-mark":20}],19:[function(require,module,exports){
 // Reference: http://es5.github.io/#x15.4.4.18
@@ -768,4 +765,5 @@ var util = {
 }
 
 module.exports = util;
-},{}]},{},[18]);
+},{}]},{},[18])(18)
+});

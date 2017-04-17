@@ -4,7 +4,7 @@
   "description": "A small library for checking types",
   "main": "src/index.js",
   "scripts": {
-    "build": "browserify ./src/index.js > type-mark.js && uglifyjs --compress --mangle --output type-mark.min.js -- type-mark.js",
+    "build": "browserify --standalone type ./src/index.js > type-mark.js && uglifyjs --compress --mangle --output type-mark.min.js -- type-mark.js",
     "test": "nyc mocha --timeout=10000 --recursive test --bail",
     "coverage": "nyc --reporter=html mocha --timout=10000 --recursive test",
     "site": "cd docs && bundle exec jekyll serve"

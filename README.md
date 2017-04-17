@@ -1,124 +1,93 @@
-<img src='docs/logo.png'>
+# [type-mark](http://www.ejrbuss.net/type-mark)
 
-A small JavaScript library for type checking.
+### Why use type-mark
 
-# WIP
-
-**Not ready to be used.**
-
-## Specification
-
-### Type Checks
-
-All type checks return a new `true` object if the type check passes
-and `false` otherwise
+Because `typeof` just doesn't cut it. The canonical example being
+```js
+> typeof null
+"object"
 ```
-type(x).undefined // checks if 'x' is undefined
-type(x).boolean   // checks if 'x' is a boolean
-type(x).number    // checks if 'x' is a number
-type(x).string    // checks if 'x' is a string
-type(x).function  // checks if 'x' is a function
-type(x).object    // checks if 'x' is an object (not null)
-type(x).array     // checks if 'x' is an array (convenience)
+With type-mark checking for `null` is as easy as
+```js
+> type(null).object
+false
 ```
+Not to mention the added benifits of [modifiers](#modifiers), [interfaces](#interfaces), and
+[custom validation](#writing-your-own-tests).
 
-Additional utility tests are provided
-```
-type(x).empty    // checks if 'x' is an empty string, array, or object
-type(x).native   // checks if 'x' is native code
-type(x).integer  // checks if 'x' is an integer
-type(x).positive // checks if 'x' is a positive number
-type(x).negative // checks if 'x' is a negative number
-type(x).even     // checks if 'x' is an even number
-type(x).odd      // check if 'x' is an odd number
-type(x).exsists  // checks if 'x' exsists
-```
+### Considerations
 
-Functional tests allow for parameterized checks
-```
-type(x).lengthof(size)          // checks if 'x' has a length equal to size
-type(x).instanceof(constructor) // checks if 'x' is an instance of constructor
-type(x).max(n)                  // checks if 'x' is less than or equal to max
-type(x).min(n)                  // checks if 'x' is greater than or equal to min
-type(x).range(min, max)         // checks if 'x' is inclusisvely within min and max
-type(x).like(duck)              // check if 'x' is like duck
-type(x).implements(duck)        // checks if 'x' implements the duck interface
+type-mark is a **dependecy free** library clocking in at about ~10kb. In
+terms of browser combatibility you will be safe in the following browser
+versions based on [MDN](https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_Objects/Object/defineProperty).
+
+| Firefox (Gecko) | Chrome | Internet Explorer | Opera | Safari |
+| ------- | --------------- | ------ | ----------------- | ----- | ------ |
+| 4.0 (2) | 5 | 9 | 11.60 | 5.1
+
+### Installing
+
+#### On the Client
+
+You can use the rawgit CDN to get the latest minified version
+
+```html
+<script type="text/javascript" src="{{ site.cdn }}"></script>
 ```
 
-### Modifiers
+Or you can include your own. Just save a copy of the minified file to your
+site's javascript directory.
 
-Modifiers change the behavior of a specified test.
-```
-type(x).not.test            // checks if 'x' fails the test
-type(x).arraof.test         // checks if 'x's array elements pass the test
-type(x).objectof.test       // check if 'x's object elements pass the test
-type(x).of.test             // check if 'x's elements pass the test
-type(x, y, z).collapse.test // find the first of 'x', 'y', and 'z' that passes the test
-type(x).assert.test         // if 'x' fails a TypeError is thrown
+```html
+<script type="text/javascript" src="js/type-mark.min.js"></script>
 ```
 
-Modifiers can be cominded together. For example:
-```
-type(x, y, z).assert.collapse.not.test // assert that one of x, y, or z fails the test and return that value
-```
+Using any of the above methods will make type-check available via your
+choice of commonjs interface. If `require` is not defined type-check defines
+`type` on the window. You can use `type.collision` to access any previous
+value of `window.type`.
 
-### Interfaces
+#### On Node
 
-Interfaces provide a mechanism for defining data types.
-```
-let interface = type({
-    key1 : type.integer,
-    key2 : type.string
-})
-type(x).implements(interface) // 'x' must contain the members key1 and key2 and they must have the correct types. X may
+type-mark is available through [npm](https://www.npmjs.com/). When using
+[node.js](https://nodejs.org/en/) you can install using npm
+
+```bash
+$ npm install type-mark
 ```
 
-When passed an object not passed through type, implements just checks to
-see if the given object contains the same keys.
-
-### Extending
-
-It is easy to extend type checker to feature new tests, use `extend` when
-your test does not require parameters. Use `extendfn` when your test
-does require parameters. Your test recieves only the value being tested
-and the parameters passed. An optional second parameter can be used to
-specify a custom TypeError message when your test is used with an assert.
-```
-type.extend('isthree', function(arg) {
-    return arg === 3 || /three/i.test(arg)
-})
-
-type(x).isthree
-
-type.extendfn('equals', function(value) {
-    return function(arg) {
-        return arg === value;
-    }
-}))
-
-type(x).equals(value)
+In order to actually use type-mark in your Node project you will need to
+require it in using
+```js
+var type = require('type-mark');
 ```
 
-```
-TypeState.prototype.on = function(arg, ...patterns) {
-    for(var i = 0, j = 1; j < patterns.length; i += 2, j += 2) {
-        var condition = patterns[i];
-        var fn        = patterns[j];
-        if(condition(arg)) {
-            return fn();
-        }
-    }
-    return false;
-};
+#### From Scratch
 
-let match = function(arg) {
-    return function(...patterns) {
-        return type(arg).on(...patterns);
-    }
-}
+You can also clone the git repository if you want the full source or are
+interested in making modifications. type-check is dependency free so working
+with it is as easy as cloning.
 
-match(x)(
-    type.string, console.log,
-    type.number, console.err
-);
+```bash
+$ git clone https://github.com/ejrbuss/type-mark.git
 ```
+
+To run the npm scripts you will need to run `npm install` as well as the
+following global dependencies
+
+- [mocha](https://mochajs.org/),
+- [istanbul](https://istanbul.js.org/),
+- [browserify](http://browserify.org/),
+- [uglify-js](https://www.npmjs.com/package/uglify-js) and
+- [jekyll/bundle](https://jekyllrb.com/).
+
+The following npm scripts are made avaialble
+
+```bash
+$ npm run test     # run tests
+$ npm run coverage # generate istanbul html report
+$ npm run build    # build type-mark.js and type-mark.min.js for the client
+$ npm run site     # run the docs site
+```
+
+### [Getting Started](http://www.ejrbuss.net/type-mark/#getting-started)

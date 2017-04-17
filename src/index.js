@@ -17,10 +17,4 @@ require('./extensions/max');
 require('./extensions/range');
 require('./extensions/implements');
 
-var type = require('./type-mark');
-
-if(typeof window !== 'undefined' && typeof require === 'undefiend') {
-    type.collison = window.type;
-    window.type   = type;
-}
-module.exports = type;
+module.exports = require('./type-mark');

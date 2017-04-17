@@ -1,6 +1,6 @@
 {
   "name": "type-mark",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "A small library for checking types",
   "main": "src/index.js",
   "scripts": {

@@ -31,5 +31,5 @@ exclude:
   - Gemfile.lock
 
 repository: ejrbuss/type-mark
-version: 1.0.3
-cdn: https://cdn.rawgit.com/ejrbuss/type-mark/b5e5cbbab05f2709106fa6753e6a8327ddee3dbb/type-mark.min.js
+version: 1.0.4
+cdn: https://cdn.rawgit.com/ejrbuss/type-mark/031ad1b84ba47e61e02bdd16f4fa48e38787edb8/type-mark.min.js

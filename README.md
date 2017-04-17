@@ -26,7 +26,7 @@ Not to mention the added benifits of [modifiers](#modifiers), [interfaces](#inte
 You can use the rawgit CDN to get the latest minified version
 
 ```html
-<script type="text/javascript" src="https://cdn.rawgit.com/ejrbuss/type-mark/hash/type-mark.min.js'"></script>
+<script type="text/javascript" src="https://cdn.rawgit.com/ejrbuss/type-mark/031ad1b84ba47e61e02bdd16f4fa48e38787edb8/type-mark.min.js'"></script>
 ```
 
 Or you can include your own. Just save a copy of the minified file to your

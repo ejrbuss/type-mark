@@ -94,6 +94,7 @@ $ npm run test     # run tests
 $ npm run coverage # generate istanbul html report
 $ npm run build    # build type-mark.js and type-mark.min.js for the client
 $ npm run site     # run the docs site
+$ npm run version  # update version number and cdn
 ```
 
 ### Getting Started

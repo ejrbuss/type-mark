@@ -14,8 +14,9 @@ engines:
         enabled: false
   eslint:
     enabled: true
-    no-unused-expressions:
-        # type checks appears as unused expressions
+    # ... CONFIG CONTENT ...
+    checks:
+      no-unused-expressions:
         enabled: false
   fixme:
     enabled: true

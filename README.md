@@ -1,5 +1,7 @@
 # [type-mark](http://www.ejrbuss.net/type-mark)
 
+[![Code Climate](https://codeclimate.com/github/ejrbuss/type-mark/badges/gpa.svg)](https://codeclimate.com/github/ejrbuss/type-mark)
+
 ## Why use type-mark
 
 Because `typeof` just doesn't cut it. The canonical example being

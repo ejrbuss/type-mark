@@ -1,6 +1,6 @@
 # [type-mark](http://www.ejrbuss.net/type-mark)
 
-# Why use type-mark
+## Why use type-mark
 
 Because `typeof` just doesn't cut it. The canonical example being
 ```js

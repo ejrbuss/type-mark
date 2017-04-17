@@ -5,7 +5,11 @@
     <main class="page-content animated fadeIn" aria-label="Content">
       <div class="container">
         <div class="columns">
-          <div class="column hide-xs   col-sm-1  col-md-2 col-3"></div>
+          <div class="column                     hide-md  col-1"></div>
+          <div class="column                     hide-md  col-2">
+             {% include nav.html %}
+          </div>
+          <div class="column hide-xs             show-md  col-1"></div>
           <div class="column col-xs-12 col-sm-10 col-md-8 col-6">
              {% include header.html %}
              {{ content }}

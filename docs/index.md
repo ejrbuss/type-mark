@@ -7,7 +7,7 @@ layout: home
 
 {% include banner.html %}
 
-<h3 class="text-center" style="color:#00A79D;">make type checking <i>lovely</i></h3>
+<h3 class="text-center no-nav" style="color:#00A79D;">make type checking <i>lovely</i></h3>
 
 ### Why use type-mark
 
@@ -307,7 +307,212 @@ type(x).assert.not.arrayof.number
 
 #### Interfaces
 
+The checks looked at so far don't do much to help define type checkable objects
+with a mix of different types. This is where interfaces and type-mark's
+alternate syntax comes in. An interface looks like the following
+
+```js
+var interface = {
+    name : type.string,
+    age  : type.integer,
+    coordinate : {
+        x : type.number,
+        y : type.number,
+        z : type.number
+    }
+}
+```
+
+Interfaces can be passed to the `implements` check to check if an object meets
+a set of structured tests. For instance, based on our interface above we can
+test to see if a or b implement the interface.
+
+```js
+> a = {
+  name : 'bear',
+  age  : 14.5,
+    coordinate : {
+      x : 0.0,
+      y : 1.1,
+      z : 0.1
+    }
+  }
+Object {...}
+> b = {
+  name : 'bird',
+  age  : 1,
+    coordinate : {
+      x : 0.0,
+      y : 0.0,
+      z : 14.0,
+      flag : true
+    }
+  }
+Object {...}
+> type(a).implements(interface)
+false
+> type(b).implements(interface)
+TypeState {...}
+```
+
+A couple of things to note about this example. First notice that `a` fails the
+check even though only one of it properties is incorrect `age` is a float rather
+than an integer. Also `b` succeeds the check even though it contains additional
+data `coordinates.flag`. The `implements` check does not care if the object it
+recieved contains additionaly properties.
+
+Interfaces can also be nested within interfaces. You can use `type.implements`
+to achieve this. For example
+
+```js
+var nestedInterface = {
+    coordinates : type.arrayof.implements({
+        x : type.number,
+        y : type.number
+    })
+}
+```
+
+is a valid interface that checks if the supplied object contains a property
+ccordinates that is an arrayh of `{x, y}` objects. This is possible because
+interfaces are just a composed set of validation functions, and because
+`type.implements(interface)` returns a function it can be used.
+
+This also means that you can provide whatever function to the interface you
+would like, for instance
+
+```js
+var interface {
+    three : function isThree(arg) {
+        return arg === 3 || /3|three|iii/i.test(arg);
+    }
+}
+```
+
+Is also a valid interface. This makes interfaces extremely flexible especially
+when combined with custom tests described in the next section.
+
 #### Writing Your own Tests
+
+type-mark provides to functions for adding tests `extend` and `extendfn`. The
+first allows you to define simple property based checks, the second allows for
+curryable functions.
+
+##### `extend`
+
+Creates a new property based check.
+
+```js
+type.extend('nameOfTest', function test(value) {
+    return isValueCorrect(value);
+}, function customMessage(value) {
+    return value + ' was not correct :('
+});
+```
+
+The first argument passed to `extend` is the name of the test, which will be
+used for the default error message as well as defining all the access points
+ie. `type(x).name`, `type.not.name`, etc.
+
+The sceond argument passed to `extend` is the test function itself, it recieves
+the value currently being tested and is expected to return a boolean result.
+It is also executed in the context of the `TypeState` object it is being
+called on. This gives you access to information such as the user specified
+message, the currently set modidfiers, and more. see the [API]() for all the
+details.
+
+The third (optional) argument passed to `extend` is the error message function.
+This will be called if your test was assered and failed. It is passed the value
+being tested and is also executed in the context of the `TypeState` object.
+
+As an example we will use our previous `isThree` function
+
+```js
+function isThree(arg) {
+    return arg === 3 || /3|three|iii/i.test(arg);
+}
+```
+
+To create a new property check we would
+
+```js
+type.extend('isThree', isThree, function(arg) {
+    return arg + ' is not three :(';
+});
+```
+
+We can now use isThree in all the ways you would expect.
+
+```js
+> type(3).isThree
+TypeState {...}
+> type('three').not.isThree
+false
+> type.arrayof.isThree([3, 'THREE', 'IiI'])
+TypeState {...}
+```
+
+#### `extendfn`
+
+Creates a new function based check. Takes the same arguments as `extend`
+except it will be passed any number of specified arguments prior to the actual
+value being tested. For example lets create a validation function that asserts
+that three numbers sum to 100.
+
+```js
+function threeSumTo100(n1, n2, arg) {
+    return n1 + n2 + arg === 100;
+}
+```
+
+To create a new function check we would
+
+```js
+type.extendfn('threeSumTo100', threeSumTo100, function(n1, n2, arg) {
+    return n1 + ' + ' + n2 + ' + ' + arg + ' does not equal 1000';
+});
+```
+
+We can now use threeSumTo100 in all the ways you would expect.
+
+```js
+> type(50).threeSumTo100(25, 25)
+TypeState {...}
+> type('100').threeSumTo100(0, 0)
+false
+> type.not.arrayof.threeSumTo100(90, 5, [5, 5, 5])
+TypeState {...}
+> type.threeSumTo100(33)(33)(33)
+false
+```
+
+Note that `type.threeSumTo100` is now a curried function. This means we can
+partially apply parameters to create new functions. For example
+
+```js
+var twoSumTo50 = type.threeSumTo100(50)
+```
+
+**Note** that in order to support currying with the mofidiers `not`, `arrayof`,
+`collapse`, etc. your function may be called additional times during a test
+with values that do not directly relate to the values being tested. For this
+reason it is best your tests be pure. To demonstrate this take the following
+example
+
+```js
+> type.extend('log', function(arg) {
+    console.log(arg);
+    return arg;
+  })
+function type() {...}
+> type.arrayof.log([1, 2, 3, 4])
+< [1, 2, 3, 4]
+< 1
+< 2
+< 3
+< 4
+true
+```
 
 ### Change Notes
 

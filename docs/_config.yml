@@ -19,6 +19,7 @@ description: > # this means to ignore newlines until "baseurl:"
   The github pages site for type-mark, the fun loving validation library
 baseurl: "" # the subpath of your site, e.g. /blog
 url: "" # the base hostname & protocol for your site, e.g. http://example.com
+baseurl: /type-mark
 twitter_username: ejrbuss
 github_username:  ejrbus
 

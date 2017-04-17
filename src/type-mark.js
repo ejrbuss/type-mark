@@ -1,5 +1,5 @@
 var util = require('./util');
-require('./polyfilles');
+require('./polyfills');
 
 /**
  * Returns a new TypeState object that can test your value.

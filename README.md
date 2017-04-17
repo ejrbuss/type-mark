@@ -1,6 +1,6 @@
 # [type-mark](http://www.ejrbuss.net/type-mark)
 
-### Why use type-mark
+# Why use type-mark
 
 Because `typeof` just doesn't cut it. The canonical example being
 ```js
@@ -15,19 +15,9 @@ false
 Not to mention the added benifits of [modifiers](#modifiers), [interfaces](#interfaces), and
 [custom validation](#writing-your-own-tests).
 
-### Considerations
+## Get It
 
-type-mark is a **dependecy free** library clocking in at about ~10kb. In
-terms of browser combatibility you will be safe in the following browser
-versions based on [MDN](https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_Objects/Object/defineProperty).
-
-| Firefox (Gecko) | Chrome | Internet Explorer | Opera | Safari |
-| ------- | --------------- | ------ | ----------------- | ----- | ------ |
-| 4.0 (2) | 5 | 9 | 11.60 | 5.1
-
-### Installing
-
-#### On the Client
+### On the Client
 
 You can use the rawgit CDN to get the latest minified version
 
@@ -47,7 +37,7 @@ choice of commonjs interface. If `require` is not defined type-check defines
 `type` on the window. You can use `type.collision` to access any previous
 value of `window.type`.
 
-#### On Node
+### On Node
 
 type-mark is available through [npm](https://www.npmjs.com/). When using
 [node.js](https://nodejs.org/en/) you can install using npm
@@ -62,7 +52,7 @@ require it in using
 var type = require('type-mark');
 ```
 
-#### From Scratch
+### From Scratch
 
 You can also clone the git repository if you want the full source or are
 interested in making modifications. type-check is dependency free so working
@@ -90,4 +80,4 @@ $ npm run build    # build type-mark.js and type-mark.min.js for the client
 $ npm run site     # run the docs site
 ```
 
-### [Getting Started](http://www.ejrbuss.net/type-mark/#getting-started)
+## [Getting Started](http://www.ejrbuss.net/type-mark/#getting-started)

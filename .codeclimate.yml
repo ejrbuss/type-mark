@@ -9,8 +9,14 @@ engines:
       - javascript
       - python
       - php
+    checks:
+      Similar code:
+        enabled: false
   eslint:
     enabled: true
+    no-unused-expressions:
+        # type checks appears as unused expressions
+        enabled: false
   fixme:
     enabled: true
 ratings:
@@ -28,6 +34,7 @@ exclude_paths:
 - docs/
 - ./type-mark.js
 - ./type-mark.min.js
+- ./src/polyfills.js
 parserOptions:
   sourceType: module
   ecmaFeatures:

@@ -1,7 +1,6 @@
 var assert = require('assert');
 var helper = require('../helper');
-var type   = require('../../src/type-mark');
-require('../../src/extensions/native');
+var type   = require('../../type-mark.min');
 
 helper.native    = [console.log, [].concat];
 helper.notNative = [function() {}, function named() {}];

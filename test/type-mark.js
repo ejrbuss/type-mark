@@ -1,5 +1,5 @@
 var assert = require('assert');
-var type   = require('../src/type-mark');
+var type   = require('../type-mark.min');
 
 describe('type-mark', function() {
     describe('type()', function() {

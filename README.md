@@ -1,5 +1,7 @@
 # [type-mark](http://www.ejrbuss.net/type-mark)
 
+[![Build Status](https://travis-ci.org/ejrbuss/type-mark.svg?branch=master)](https://travis-ci.org/ejrbuss/type-mark)
+[![npm version](https://badge.fury.io/js/type-mark.svg)](https://badge.fury.io/js/type-mark)
 [![Code Climate](https://codeclimate.com/github/ejrbuss/type-mark/badges/gpa.svg)](https://codeclimate.com/github/ejrbuss/type-mark)
 
 ## Why use type-mark

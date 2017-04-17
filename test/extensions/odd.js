@@ -1,7 +1,6 @@
 var assert = require('assert');
 var helper = require('../helper');
-var type   = require('../../src/type-mark');
-require('../../src/extensions/odd');
+var type   = require('../../type-mark.min');
 
 describe('.odd', function() {
     helper('odd', {

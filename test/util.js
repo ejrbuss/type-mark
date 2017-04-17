@@ -1,5 +1,5 @@
 var assert = require('assert');
-var util   = require('../src/util');
+var util   = require('../type-mark.min').util;
 
 describe('util', function() {
     describe('.not()', function() {

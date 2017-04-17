@@ -11,12 +11,6 @@ var util = require('../util');
 type.extend('empty', function(arg) {
     return util.length(arg) === 0;
 }, function(arg) {
-    if(typeof arg === 'string' || Array.isArray(arg)) {
-        return arg.length === 0;
-    }
-    if(arg !== null && typeof arg === 'object') {
-        return Object.keys(arg).length === 0;
-    }
     return 'Expected an empty object instead found object with length ' + util.length(arg);
 });
 
@@ -44,18 +38,18 @@ var type = require('../type-mark');
 require('./types');
 require('./object');
 
-function implements(interface, arg) {
-    if(type(interface).function) {
-        return interface.apply(this, [arg]);
+function _implements(_interface, arg) {
+    if(type(_interface).function) {
+        return _interface.apply(this, [arg]);
     }
-    type(interface).assert.object;
-    return Object.keys(interface).every(function(key) {
-        return type(arg).object && implements(interface[key], arg[key]);
+    type(_interface).assert.object;
+    return Object.keys(_interface).every(function(key) {
+        return type(arg).object && _implements(_interface[key], arg[key]);
     });
 }
 
 // Extension code
-type.extendfn('implements', implements, function(interface, arg) {
+type.extendfn('implements', _implements, function(_interface, arg) {
     return arg + ' fails to implement interface';
 });
 },{"../type-mark":20,"./object":13,"./types":17}],6:[function(require,module,exports){
@@ -430,6 +424,7 @@ if (!Object.keys) {
 }
 },{}],20:[function(require,module,exports){
 var util = require('./util');
+require('./polyfills');
 
 /**
  * Returns a new TypeState object that can test your value.
@@ -570,9 +565,11 @@ util.define(TypeState.prototype, 'type', function() {
 });
 
 /**
+ * Creates a new modifier on TypeState. Modifiers or the current flags with
+ * themselves.
  *
- * @param {*} name
- * @param {*} flag
+ * @param {string} name the name of the modifier
+ * @param {number} flag the bitwise mask
  */
 function modifier(name, flag) {
     util.define(TypeState.prototype, name, function() {
@@ -643,7 +640,7 @@ type.extendfn = function extendfn(name, test, message) {
 }
 
 module.exports = type;
-},{"./util":21}],21:[function(require,module,exports){
+},{"./polyfills":19,"./util":21}],21:[function(require,module,exports){
 var util = {
 
     /**
@@ -761,7 +758,7 @@ var util = {
         };
     }
 
-}
+};
 
 module.exports = util;
 },{}]},{},[18])(18)

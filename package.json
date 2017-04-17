@@ -20,11 +20,11 @@
   },
   "homepage": "https://github.com/ejrbuss/type-mark#readme",
   "devDependencies": {
-    "uglify": "^2.4.10",
     "browserify": "^14.3.0",
     "istanbul": "^0.4.5",
     "mocha": "^3.2.0",
-    "nyc": "^10.2.0"
+    "nyc": "^10.2.0",
+    "uglifyjs": "^2.4.10"
   },
   "keywords": [
     "type",

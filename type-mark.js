@@ -456,6 +456,7 @@ type.TypeState = TypeState;
 type.not       = { arrayof : {}, of : {} };
 type.arrayof   = { not : {} };
 type.of        = { not : {} };
+type.util      = util;
 
 TypeState.prototype = {
 

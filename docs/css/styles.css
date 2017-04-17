@@ -1,3 +1,13 @@
+h1 code,
+h2 code,
+h3 code,
+h4 code,
+h5 code,
+h6 code {
+    background-color: inherit;
+    color: inherit !important;
+}
+
 #top-nav {
     background-color:#fff;
     width:100%;
@@ -5,4 +15,9 @@
     z-index:100;
     top:0;
     padding-top:10px;
+}
+
+#side-nav {
+    overflow-y: auto !important;
+    height: calc(100% - 20px) !important;
 }

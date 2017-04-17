@@ -25,6 +25,7 @@ type.TypeState = TypeState;
 type.not       = { arrayof : {}, of : {} };
 type.arrayof   = { not : {} };
 type.of        = { not : {} };
+type.util      = util;
 
 TypeState.prototype = {
 
@@ -138,9 +139,11 @@ util.define(TypeState.prototype, 'type', function() {
 });
 
 /**
+ * Creates a new modifier on TypeState. Modifiers or the current flags with
+ * themselves.
  *
- * @param {*} name
- * @param {*} flag
+ * @param {string} name the name of the modifier
+ * @param {number} flag the bitwise mask
  */
 function modifier(name, flag) {
     util.define(TypeState.prototype, name, function() {

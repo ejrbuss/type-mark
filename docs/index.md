@@ -1,7 +1,4 @@
 ---
-# You don't need to edit this file, it's empty on purpose.
-# Edit theme's home layout instead if you wanna make some changes
-# See: https://jekyllrb.com/docs/themes/#overriding-theme-defaults
 layout: home
 ---
 
@@ -516,11 +513,7 @@ true
 
 ### Change Notes
 
-| Version | Changes |
-| ------- | ------- |
-| v1.0.0 | Initial Release |
-| v1.0.1 | Name changed from type-check to type-mark |
-| v1.0.2 | Fixed `window is not defined` bug on node |
+{% include changes.html %}
 
 ### Contact
 

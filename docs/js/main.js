@@ -65,6 +65,12 @@ $(document).ready(function() {
 
     });
 
+    // Shorten API nav items
+    $('#side-nav .nav-item a').each(function() {
+        var $this = $(this);
+        $this.text($this.text().replace(/\([^)]*\)/g, '(...)'));
+    });
+
     // Configure scrollfire to set the active nav item
     $('h3, h4').scrollfire({
         onScroll : activate,

@@ -211,9 +211,7 @@ require('./extensions/max');
 require('./extensions/range');
 require('./extensions/implements');
 
-var type = require('./type-mark');
-
-module.exports = type;
+module.exports = require('./type-mark');
 },{"./extensions/array":1,"./extensions/empty":2,"./extensions/even":3,"./extensions/exists":4,"./extensions/implements":5,"./extensions/instanceof":6,"./extensions/integer":7,"./extensions/lengthof":8,"./extensions/max":9,"./extensions/min":10,"./extensions/native":11,"./extensions/negative":12,"./extensions/object":13,"./extensions/odd":14,"./extensions/positive":15,"./extensions/range":16,"./extensions/types":17,"./polyfills":19,"./type-mark":20}],19:[function(require,module,exports){
 // Reference: http://es5.github.io/#x15.4.4.18
 if (!Array.prototype.forEach) {
@@ -458,6 +456,7 @@ type.TypeState = TypeState;
 type.not       = { arrayof : {}, of : {} };
 type.arrayof   = { not : {} };
 type.of        = { not : {} };
+type.util      = util;
 
 TypeState.prototype = {
 

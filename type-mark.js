@@ -424,7 +424,6 @@ if (!Object.keys) {
 }
 },{}],20:[function(require,module,exports){
 var util = require('./util');
-require('./polyfills');
 
 /**
  * Returns a new TypeState object that can test your value.
@@ -640,7 +639,7 @@ type.extendfn = function extendfn(name, test, message) {
 }
 
 module.exports = type;
-},{"./polyfills":19,"./util":21}],21:[function(require,module,exports){
+},{"./util":21}],21:[function(require,module,exports){
 var util = {
 
     /**

@@ -2,3 +2,9 @@ language: node_js
 node_js:
   - "node"
   - "iojs"
+addons:
+  code_climate:
+    repo_token: 852126ab267fb5f244ce02d1f0c72b774c769f8cb6a07b506f65967755775916
+after_success:
+  - npm install -g codeclimate-test-reporter
+  - codeclimate-test-reporter < lcov.info

@@ -14,6 +14,7 @@
     "url": "git+https://github.com/ejrbuss/type-mark.git"
   },
   "author": "Eric Buss <ejrbuss@gmail.com>",
+  "homepage": "http://ejrbuss.net/type-mark",
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/ejrbuss/type-mark/issues"

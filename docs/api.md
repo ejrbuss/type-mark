@@ -10,7 +10,7 @@ layout: home
 ### Introduction
 
 Note if you just want a quick understanding of type-mark it is recommended you
-start with the [Getting Started](/#getting-started) section this site's
+start with the [Getting Started]({{ site.baseurl }}/#getting-started) section this site's
 homepage.
 
 Everything you could possibly need to know and probably a way more. This
@@ -18,7 +18,7 @@ page breaks down the internals of type-checker into 5 key sections.
 
  - **[Invovled Examples](#involved-examples)** Some more intense examples than
  what appears in
- [Getting Started](/#getting-started)
+ [Getting Started]({{ "/#getting-started" | relative_url }})
  - **[TypeState](#typestate)** A detailed look at the TypeSate object itself that
  makes type-mark tick
  - **[Extensions](#extensions)** Also referred to as tests or checks. This

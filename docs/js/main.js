@@ -1,3 +1,17 @@
+// Make scrolling to header links a little prettier
+// http://stackoverflow.com/questions/17534661/make-anchor-link-go-some-pixels-above-where-its-linked-to
+function offsetAnchor() {
+    if(location.hash.length !== 0) {
+        console.log('Allo!');
+        window.scrollTo(window.scrollX, window.scrollY - 62);
+    }
+}
+$(document).on('click', 'a[href^="#"]', function(event) {
+    window.setTimeout(function() {
+        offsetAnchor();
+    }, 0);
+});
+
 $(document).ready(function() {
 
     // Initialize code highlighting
@@ -84,6 +98,13 @@ $(document).ready(function() {
 
     // Add space before headers
     $('h3, h4, h5, h6').before('<br>');
+
+    // Fix scroll offset if needed
+    if(location.hash.length !== 0) {
+        $('.page-content').append('<a id="arrival-url" href="' + location.hash + '"></a>');
+        $('#arrival-url')[0].click();
+    }
+
 });
 
 function activate(elem) {

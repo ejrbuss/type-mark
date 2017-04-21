@@ -416,8 +416,8 @@ The sceond argument passed to `extend` is the test function itself, it recieves
 the value currently being tested and is expected to return a boolean result.
 It is also executed in the context of the `TypeState` object it is being
 called on. This gives you access to information such as the user specified
-message, the currently set modidfiers, and more. see the [API]() for all the
-details.
+message, the currently set modidfiers, and more. see the
+[API]({{ "/api" | relative_url }}) for all the details.
 
 The third (optional) argument passed to `extend` is the error message function.
 This will be called if your test was assered and failed. It is passed the value

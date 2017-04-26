@@ -4,5 +4,5 @@ var type = require('../type-mark');
 type.extend('even', function(arg) {
     return typeof arg === 'number' && arg % 2 === 0;
 }, function(arg) {
-    return 'Expected an even number instead found ' + arg;
+    return type.format(this, 'Expected {an} {even|odd} number{s} instead found ' + arg);
 });

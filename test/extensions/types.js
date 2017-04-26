@@ -1,26 +1,29 @@
 var assert = require('assert');
 var helper = require('../helper');
-var type   = require('../../type-mark.min');
+var multi  = require('../multi-require');
 
-function testType(type) {
-    var test = {
-        'undefined' : false,
-        'null'      : false,
-        'boolean'   : false,
-        'number'    : false,
-        'function'  : false,
-        'symbol'    : false,
-        'object'    : false,
-        'array'     : false
+multi('../src/index.js', '../type-mark.min.js', function(type) {
 
-    };
-    test[type] = true;
-    describe(type, function() {
-        helper(type, test);
-    });
-}
+    function testType(name) {
+        var test = {
+            'undefined' : false,
+            'null'      : false,
+            'boolean'   : false,
+            'number'    : false,
+            'function'  : false,
+            'symbol'    : false,
+            'object'    : false,
+            'array'     : false
 
-testType('undefined');
-testType('boolean');
-testType('number');
-testType('function');
+        };
+        test[name] = true;
+        describe(name, function() {
+            helper(type, name, test);
+        });
+    }
+
+    testType('undefined');
+    testType('boolean');
+    testType('number');
+    testType('function');
+});

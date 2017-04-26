@@ -1,19 +1,21 @@
 var assert = require('assert');
 var helper = require('../helper');
-var type   = require('../../type-mark.min');
+var multi  = require('../multi-require');
 
 helper.native    = [console.log, [].concat];
 helper.notNative = [function() {}, function named() {}];
 
-describe('.native', function() {
-    helper('native', {
-        'undefined' : false,
-        'null'      : false,
-        'boolean'   : false,
-        'number'    : false,
-        'object'    : false,
-        'native'    : true,
-        'notNative' : false,
-        'array'     : false
+multi('../src/index.js', '../type-mark.min.js', function(type) {
+    describe('.native', function() {
+        helper(type, 'native', {
+            'undefined' : false,
+            'null'      : false,
+            'boolean'   : false,
+            'number'    : false,
+            'object'    : false,
+            'native'    : true,
+            'notNative' : false,
+            'array'     : false
+        });
     });
 });

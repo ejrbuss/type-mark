@@ -11,10 +11,9 @@ var util = {
     not : function(fn) {
         return function() {
             var result = fn.apply(this, arguments);
-            if(typeof result !== 'function') {
-                return !result;
-            }
-            return util.not(result);
+            return typeof result !== 'function'
+                ? !result
+                : util.not(result);
         }
     },
 
@@ -31,7 +30,7 @@ var util = {
 
             var that   = this;
             var result = fn.apply(that, arguments);
-            var args   = Array.prototype.slice.call(arguments);
+            var args   = [].slice.call(arguments);
             var array  = args.pop();
 
             if(typeof result !== 'function') {
@@ -56,7 +55,7 @@ var util = {
 
             var that   = this;
             var result = fn.apply(that, arguments);
-            var args   = Array.prototype.slice.call(arguments);
+            var args   = [].slice.call(arguments);
             var obj    = args.pop();
 
             if(typeof result !== 'function') {
@@ -77,17 +76,15 @@ var util = {
      * @returns {object}        the util object for chaining
      */
     define : function(obj, name, fn) {
-        Object.defineProperty(obj, name, {
-            get : fn
-        });
+        Object.defineProperty(obj, name, { get : fn });
     },
 
     /**
      * Returns the length of the object, array, or string passed to the function. If
-     * any other types are passed, null is returned.
+     * any other types are passed, undefined is returned.
      *
      * @param   {mixed} arg the value to get the length of
-     * @returns {mixed}     the length if applicable or null
+     * @returns {mixed}     the length if applicable or undefined
      */
     length : function(arg) {
         if(typeof arg === 'string' || Array.isArray(arg)) {
@@ -96,19 +93,18 @@ var util = {
         if(arg !== null && typeof arg === 'object') {
             return Object.keys(arg).length;
         }
-        return null;
     },
 
     // http://blog.carbonfive.com/2015/01/14/gettin-freaky-functional-wcurried-javascript/
     curry : function(fn) {
         var arity = fn.length;
         return function f1() {
-            var args = Array.prototype.slice.call(arguments, 0);
+            var args = [].slice.call(arguments, 0);
             if (args.length >= arity) {
                 return fn.apply(null, args);
             } else {
                 return function f2() {
-                    var args2 = Array.prototype.slice.call(arguments, 0);
+                    var args2 = [].slice.call(arguments, 0);
                     return f1.apply(null, args.concat(args2));
                 }
             }

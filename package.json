@@ -2,9 +2,9 @@
   "name": "type-mark",
   "version": "1.0.4",
   "description": "A small library for checking types",
-  "main": "./type-mark",
+  "main": "./src/index",
   "scripts": {
-    "build": "browserify --standalone type ./src/index.js > type-mark.js && uglifyjs --compress --mangle --output type-mark.min.js -- type-mark.js",
+    "build": "node src/build.js && browserify --standalone type ./src/index.js > type-mark.js && uglifyjs --compress --mangle --output type-mark.min.js -- type-mark.js && cp type-mark.js docs/js/type-mark.js",
     "test": "npm run build && nyc mocha --reporter dot --timeout=30000 --recursive test --bail",
     "site": "cd docs && bundle exec jekyll serve",
     "version": "node version.js"
@@ -19,11 +19,9 @@
   "bugs": {
     "url": "https://github.com/ejrbuss/type-mark/issues"
   },
-  "homepage": "https://github.com/ejrbuss/type-mark#readme",
   "devDependencies": {
     "browserify": "^14.3.0",
     "istanbul": "^0.4.5",
-    "js-yaml": "^3.8.3",
     "mocha": "^3.2.0",
     "nyc": "^10.2.0",
     "uglifyjs": "^2.4.10"

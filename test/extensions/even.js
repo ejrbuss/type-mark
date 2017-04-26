@@ -1,16 +1,18 @@
 var assert = require('assert');
 var helper = require('../helper');
-var type   = require('../../type-mark.min');
+var multi  = require('../multi-require');
 
-describe('.even', function() {
-    helper('even', {
-        'undefined' : false,
-        'null'      : false,
-        'boolean'   : false,
-        'even'      : true,
-        'odd'       : false,
-        'function'  : false,
-        'object'    : false,
-        'array'     : false
+multi('../src/index.js', '../type-mark.min.js', function(type) {
+    describe('.even', function() {
+        helper(type, 'even', {
+            'undefined' : false,
+            'null'      : false,
+            'boolean'   : false,
+            'even'      : true,
+            'odd'       : false,
+            'function'  : false,
+            'object'    : false,
+            'array'     : false
+        });
     });
 });

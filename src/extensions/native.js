@@ -17,6 +17,6 @@ type.extend('native', function(arg) {
             ? reIsNative.test(Function.prototype.toString.call(arg))
             : reIsHostCtor.test('' + arg)
         );
-}, function(value) {
-    return 'Expected a native function instead found ' + value;
+}, function(arg) {
+    type.format(this, 'Expected {a} native function{s} instead found ' + arg);
 });

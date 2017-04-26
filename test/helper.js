@@ -1,7 +1,6 @@
 var assert = require('assert');
-var type   = require('../type-mark.min');
 
-function helper(test, mapping) {
+function helper(type, test, mapping) {
 
     var names   = [];
     var values  = [];

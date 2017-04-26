@@ -1,16 +1,18 @@
 var assert = require('assert');
 var helper = require('../helper');
-var type   = require('../../type-mark.min');
+var multi  = require('../multi-require');
 
-describe('.positive', function() {
-    helper('positive', {
-        'undefined' : false,
-        'null'      : false,
-        'boolean'   : false,
-        'positive'  : true,
-        'negative'  : false,
-        'function'  : false,
-        'object'    : false,
-        'array'     : false
+multi('../src/index.js', '../type-mark.min.js', function(type) {
+    describe('.positive', function() {
+        helper(type, 'positive', {
+            'undefined' : false,
+            'null'      : false,
+            'boolean'   : false,
+            'positive'  : true,
+            'negative'  : false,
+            'function'  : false,
+            'object'    : false,
+            'array'     : false
+        });
     });
 });

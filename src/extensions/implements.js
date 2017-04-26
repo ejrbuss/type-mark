@@ -1,6 +1,4 @@
 var type = require('../type-mark');
-require('./types');
-require('./object');
 
 function _implements(_interface, arg) {
     if(type(_interface).function) {
@@ -13,6 +11,6 @@ function _implements(_interface, arg) {
 }
 
 // Extension code
-type.extendfn('implements', _implements, function(_interface, arg) {
-    return arg + ' fails to implement interface';
+type.extendfn('implements', _implements, function(arg) {
+    return type.format(this, 'Expected {} object{s} to {|not} implement interface instead found ' + arg);
 });

@@ -1,5 +1,5 @@
 var assert = require('assert');
-var util   = require('../type-mark.min').util;
+var util   = require('../src/util');
 
 describe('util', function() {
     describe('.not()', function() {
@@ -115,10 +115,10 @@ describe('util', function() {
             assert.strictEqual(util.length(''), 0);
             assert.strictEqual(util.length('test'), 4);
         });
-        it('should return null for other types', function() {
-            assert.strictEqual(util.length(true), null);
-            assert.strictEqual(util.length(2), null);
-            assert.strictEqual(util.length(function() {}), null);
+        it('should return undefined for other types', function() {
+            assert.strictEqual(util.length(true), undefined);
+            assert.strictEqual(util.length(2), undefined);
+            assert.strictEqual(util.length(function() {}), undefined);
         });
     });
 });

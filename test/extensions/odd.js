@@ -1,16 +1,18 @@
 var assert = require('assert');
 var helper = require('../helper');
-var type   = require('../../type-mark.min');
+var multi  = require('../multi-require');
 
-describe('.odd', function() {
-    helper('odd', {
-        'undefined' : false,
-        'null'      : false,
-        'boolean'   : false,
-        'even'      : false,
-        'odd'       : true,
-        'function'  : false,
-        'object'    : false,
-        'array'     : false
+multi('../src/index.js', '../type-mark.min.js', function(type) {
+    describe('.odd', function() {
+        helper(type, 'odd', {
+            'undefined' : false,
+            'null'      : false,
+            'boolean'   : false,
+            'even'      : false,
+            'odd'       : true,
+            'function'  : false,
+            'object'    : false,
+            'array'     : false
+        });
     });
 });

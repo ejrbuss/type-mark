@@ -5,6 +5,5 @@ var util = require('../util');
 type.extend('empty', function(arg) {
     return util.length(arg) === 0;
 }, function(arg) {
-    return 'Expected an empty object instead found object with length ' + util.length(arg);
+    return type.format(this, 'Expected {a|an} {|non} empty object{s} instead found an object with length ' + util.length(arg));
 });
-

@@ -28,7 +28,7 @@ Not to mention the added benifits of
 You can use the rawgit CDN to get the latest minified version
 
 ```html
-<script type="text/javascript" src="https://cdn.rawgit.com/ejrbuss/type-mark/30daffbd82ff7e4e399af6948d882b74f4a9a432/type-mark.min.js'"></script>
+<script type="text/javascript" src="https://cdn.rawgit.com/ejrbuss/type-mark/b33a3d5646d5cf4d280ab97d73c776c5522dae90/type-mark.min.js'"></script>
 ```
 
 Or you can include your own. Just save a copy of the minified file to your

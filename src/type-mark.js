@@ -7,8 +7,9 @@ var util = require('./util');
  * @returns {TypeState}       new TypeState object
  */
 function type() {
-    return new TypeState([].slice.call(arguments));
+    return new TypeState(util.toArray(arguments));
 }
+type.util = util;
 
 /**
  * Constructor for TypeState object.
@@ -16,143 +17,98 @@ function type() {
  * @param {Array} value array of values to be tested
  */
 function TypeState(val) {
-    this.value = val[0];
-    this._value = val;
-    this._flags = 0;
-    this._args  = [];
+    this.value   = val[0]; // the value being tested
+    this._value  = val;    // all values passed to type
+    this._stack  = [];     // modifier stack
+    this._args   = [];     // arguments for test
+    this._return = true;   // return value on success
 }
 type.TypeState = TypeState;
-type.not       = { arrayof : {}, of : {} };
-type.arrayof   = { not : {} };
-type.of        = { not : {} };
-type.util      = util;
 
 TypeState.prototype = {
 
     /**
-     * Resolves a TypeState either to the same TypeState or false.
+     * Given a test resolves that test using the current state.
      *
-     * @param   {string}   name    the name of the test to appear in the error
-     *                             message
-     * @param   {function} test    the test function
-     * @param   {string}   message the error message function (optional)
-     * @returns {mixed}
+     * @param   {string}   name the name of the test
+     * @param   {function} test the test function
+     * @returns {mixed}         return result, typically a boolean
      */
-    resolve : function(name, test, message) {
-
-        var result = false;
-        var state  = this;
-
-        // Default Case
-        if(!state._flags) {
-            return state.result(test) && state;
+    resolve : function(name, test) {
+        for(var i = this._stack.length - 1; i >= 0; i--) {
+            test = this._stack[i].call(this, test, name);
         }
-
-        // Swap out test for not test
-        if(state._flags & modifiers.not) {
-            test = util.not(test);
-        }
-
-        // Handle arrayof
-        if(state._flags & modifiers.arrayof) {
-            if(state._flags & modifiers.collapse) {
-                throw new TypeError('arrayof modifier does not support collapse.');
-            }
-            if(state._flags & modifiers.of) {
-                throw new TypeError('arrayof modifier does not suppoer of');
-            }
-            result = state.result(util.arrayof(test));
-
-        // Handle of
-        } else if(state._flags & modifiers.of) {
-            if(state._flags & modifiers.collapse) {
-                throw new TypeError('of modifier does not support collapse.');
-            }
-            result = state.result(util.of(test));
-
-        // Handle collapse
-        } else if(state._flags & modifiers.collapse) {
-            for(var i in state._value) {
-                if(state._value.hasOwnProperty(i)) {
-                    var arg = state._value[i];
-                    if(state.result(test, arg, typeof arg === 'undefined')) {
-                        return arg;
-                    }
-                }
-            }
-            result = false;
-
-        // Handle default case
-        } else {
-            result = state.result(test);
-        }
-
-        // Handle assert
-        if(!result && (state._flags & modifiers.assert)) {
-            var error = new TypeError(
-                state.result(state._message || message || function() {
-                    return type.format(state, 'Expected {} {|non} ' + name + '{s} instead found ' + state.type);
-                })
-            );
-            if(!(state._flags & modifiers.debug) && type(error.stack).string) {
-                error.stack = error.stack
-                    .replace(/\n.*/, '')
-                    .replace(/\n.*/, '');
-            }
-            throw error;
-        }
-
-        return result && state;
+        var result = this.result(test);
+        return result ? this._return : result;
     },
 
     /**
-     * Sets a custom error message used with assertions during  test resolution.
+     * Calls a function with the same values that a test currently being
+     * resolved would be called with.
      *
-     * @param   {function}  message set a custom error message function
-     * @returns {TypeState}         this for chaining
+     * @param   {function} test the function to recieve the arguments
+     * @returns {mixed}         the return value of your function
+     */
+    result : function(test) {
+        return test.apply(this, this._args.concat([this.value]));
+    },
+
+    /**
+     * Provide an error message to use instead of the default for the current
+     * type assertion.
+     *
+     * @param   {function | string} msg the message
+     * @returns {TypeState}             the current TypeState for chaining
      */
     message : function(msg) {
-        if(type(msg).string) {
-            this._message = function() { return msg };
-            return this;
-        }
-        type(msg).assert.function;
+        type(msg).string || type(msg).assert.function;
         this._message = msg;
         return this;
     },
 
     /**
-     * Compute the result of a test given the current TypeState. The arguments
-     * passed to the test and the test value are passed. The value can be
-     * replaced with a new passed value
+     * Returns a formatted error string given a list of strings for the asserted
+     * and found values.
      *
-     * @param   {function} test     the test function
-     * @param   {mixed}    argument a replacement argument (optional)
-     * @param   {boolean}  undef    true if arg is undefined (optional)
-     * @returns {boolean}           true or false result
+     * @param   {Array} asserted the asserted values
+     * @param   {Array} found    the found values
+     * @returns {string}         the formatted error string
      */
-    result : function(test, arg, undef) {
-        arg = typeof arg !== 'undefined' || undef ? arg : this.value
-        return test.apply(this, this._args.concat([arg]));
+    format : function(asserted, found) {
+        return "Asserted: " + this.stack.filter(function(mod) {
+            return mod !== 'assert';
+        }).concat(asserted).join(' ') + " -- Found: " + found.join(' ');
     }
-}
+
+};
 
 /**
- *
+ * Constructor for ShadowTypeState object.
  */
-type.format = function format(state, fmt) {
-    var of     = state._flags & (modifiers.arrayof | modifiers.of);
-    var not    = state._flags & modifiers.not;
-    var prefix = state._flags & modifiers.arrayof
-        ? 'an array of '
-        : 'an object of ';
-    return fmt
-        .replace(/\{s\}/g, of ? 's' : ''  )
-        .replace(/\{([^}]*?)\}/, of  ? prefix : '{$1}')
-        .replace(/\{([^}]*?)\|([^}]*?)\}/g, not ? '$2' : '$1')
-        .replace(/{([^}]*?)}/g, '$1')
-        .replace(/\s+/g, ' ');
-};
+function ShadowTypeState() {
+    this._stack = [];
+}
+
+ShadowTypeState.prototype = {
+
+    // Copy from TypeState prototype
+    message : TypeState.prototype.message,
+
+    /**
+     * Creates a new TypeState from the current ShadowTypeState.
+     *
+     * @param   {Array}             args    the args to the current test
+     * @param   {function | string} message the override message if any
+     * @returns {TypeState}                 the newly created TypeState
+     */
+    toTypeState : function(args, message) {
+        var state = new TypeState([args.pop()]);
+        state._stack   = this._stack;
+        state._message = this._message || message;
+        state._args    = args;
+        return state;
+    }
+}
 
 // Define the "type" parameter
 util.define(TypeState.prototype, 'type', function() {
@@ -161,31 +117,11 @@ util.define(TypeState.prototype, 'type', function() {
         : typeof this.value
 });
 
-/**
- * Creates a new modifier on TypeState. Modifiers or the current flags with
- * themselves.
- *
- * @param {string} name the name of the modifier
- * @param {number} flag the bitwise mask
- */
-function modifier(name, flag) {
-    util.define(TypeState.prototype, name, function() {
-        this._flags |= flag;
-        return this;
+// Define a readable modifier stack
+util.define(TypeState.prototype, 'stack', function() {
+    return this._stack.map(function(mod) {
+        return mod.name;
     });
-}
-
-// Create modifiers
-var modifiers = {
-    not      : 1,
-    arrayof  : 2,
-    of       : 4,
-    assert   : 8,
-    collapse : 16,
-    debug    : 32
-};
-Object.keys(modifiers).forEach(function(name) {
-    modifier(name, modifiers[name])
 });
 
 /**
@@ -194,21 +130,13 @@ Object.keys(modifiers).forEach(function(name) {
  * @param   {string}   name    the name of the test
  * @param   {function} test    the test function
  * @param   {function} message the error message function (optional)
- * @returns {function}         the type function for chaining
  */
-type.extend = function extend(name, test, message) {
+type.extend = type.e = function extend(name, test, message) {
     util.define(TypeState.prototype, name, function() {
-        return this.resolve(name, test, message);
+        this._message = this._message || message;
+        return this.resolve(name, test);
     });
-    type[name]             = test;
-    type.not[name]         = util.not(test);
-    type.not.arrayof[name] = util.arrayof(type.not[name]);
-    type.not.of[name]      = util.of(type.not[name]);
-    type.arrayof[name]     = util.arrayof(test);
-    type.of[name]          = util.of(test);
-    type.arrayof.not[name] = type.not.arrayof[name];
-    type.of.not[name]      = type.not.of[name];
-    return this;
+    addExtension(name, test, message);
 }
 
 /**
@@ -217,23 +145,49 @@ type.extend = function extend(name, test, message) {
  * @param   {string}   name    the name of the test
  * @param   {function} test    the test function
  * @param   {function} message the error message function (optional)
- * @returns {function}         the type function for chaining
  */
-type.extendfn = function extendfn(name, test, message) {
+type.extendfn = type.ef = function extendfn(name, test, message) {
     TypeState.prototype[name] = function() {
-        this._args = [].slice.call(arguments);
-        return this.resolve(name, test, message);
+        this._args    = util.toArray(arguments);
+        this._message = this._message || message;
+        return this.resolve(name, test);
     }
-    test                   = util.curry(test);
-    type[name]             = test;
-    type.not[name]         = util.not(test);
-    type.not.arrayof[name] = util.arrayof(type.not[name]);
-    type.not.of[name]      = util.of(type.not[name]);
-    type.arrayof[name]     = util.arrayof(test);
-    type.of[name]          = util.of(test);
-    type.arrayof.not[name] = type.not.arrayof[name];
-    type.of.not[name]      = type.not.of[name];
-    return this;
+    addExtension(name, test, message);
+}
+
+/**
+ * Modify TypeState with a new modification function that transorms a test.
+ *
+ * @param {name}     name the name of the modifier
+ * @param {function} mod  the modifier function
+ */
+type.modify = type.m = function extendmod(name, mod) {
+    var fn = function() {
+        this._stack.push(mod);
+        return this;
+    }
+    util.define(ShadowTypeState.prototype, name, fn);
+    util.define(TypeState.prototype, name, fn);
+    util.define(type, name, function() {
+        return (new ShadowTypeState())[name];
+    });
+}
+
+/**
+ * Extend type and ShadowTypeState to support a new extension.
+ *
+ * @param {string}            name    the name of the extension
+ * @param {function}          test    the extension test
+ * @param {function | string} message the default message for the extension
+ */
+function addExtension(name, test, message) {
+    type[name] = util.curry(test);
+    util.define(ShadowTypeState.prototype, name, function() {
+        var sstate = this;
+        return util.curry(function() {
+            return sstate.toTypeState(util.toArray(arguments), message).resolve(name, test);
+        }, test.length);
+    });
 }
 
 module.exports = type;

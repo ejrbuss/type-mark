@@ -1,10 +1,8 @@
-var type = require('../type-mark');
-
 /* Taken from lodash */
 /* https://github.com/lodash/lodash/blob/6cb3460fcefe66cb96e55b82c6febd2153c992cc/isNative.js */
 var reRegExpChar = /[\\^$.*+?()[\]{}|]/g
 var reIsHostCtor = /^\[object .+?Constructor\]$/
-var reIsNative = RegExp('^' +
+var reIsNative   = RegExp('^' +
     Function.prototype.toString.call(Object.prototype.hasOwnProperty)
         .replace(reRegExpChar, '\\$&')
         .replace(/hasOwnProperty|(function).*?(?=\\\()| for .+?(?=\\\])/g, '$1.*?')
@@ -17,6 +15,4 @@ type.extend('native', function(arg) {
             ? reIsNative.test(Function.prototype.toString.call(arg))
             : reIsHostCtor.test('' + arg)
         );
-}, function(arg) {
-    type.format(this, 'Expected {a} native function{s} instead found ' + arg);
 });

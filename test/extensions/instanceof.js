@@ -21,11 +21,20 @@ multi('../src/index.js', '../type-mark.min.js', function(type) {
             'instance'    : true,
             'notInstance' : false
         });
-
-        it('should have an error message specifying the instance', function() {
+        it('should throw an error if it is not passed a function', function() {
             assert.throws(function() {
-                type({}).assert.instanceof(RegExp);
-            }, /TypeError: Expected an instance of RegExp instead found \[object Object\]/);
+                type({}).assert.instanceof(12);
+            });
+        });
+        it('should throw an error showing the names of both instances', function() {
+            assert.throws(function() {
+                type(new Date()).assert.instanceof(Array);
+            }, /TypeError: Asserted: instanceof Array -- Found: instanceof Date/);
+        });
+        it('should throw an error if the argument is not an object', function() {
+            assert.throws(function() {
+                type(12).assert.instanceof(Date);
+            }, /TypeError: Asserted: object -- Found: number 12/);
         });
     });
 });

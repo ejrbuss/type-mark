@@ -1,36 +1,34 @@
 (function(f){if(typeof exports==="object"&&typeof module!=="undefined"){module.exports=f()}else if(typeof define==="function"&&define.amd){define([],f)}else{var g;if(typeof window!=="undefined"){g=window}else if(typeof global!=="undefined"){g=global}else if(typeof self!=="undefined"){g=self}else{g=this}g.type = f()}})(function(){var define,module,exports;return (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
 var type = require('./type-mark');
-var util = require('./util');
-
-
 // Extension code
-type.extend('array', Array.isArray);
+type.ef('and', function(first, second, arg) {
 
+    var args = type.util.toArray(arguments);
+    var last = args.pop();
 
-// Extension code
-type.extend('empty', function(arg) {
-    return util.length(arg) === 0;
-}, function(arg) {
-    return type.format(this, 'Expected {a|an} {|non} empty object{s} instead found an object with length ' + util.length(arg));
+    return args.every(function(test) {
+        return test(last);
+    });
 });
-
 // Extension code
-type.extend('even', function(arg) {
+type.e('array', Array.isArray);
+// Extension code
+type.e('empty', function(arg) {
+    return type.util.length(arg) === 0;
+}, function(arg) {
+    return this.format(['empty'], [this.type, 'lengthof', String(type.util.length(arg))]);
+});
+// Extension code
+type.e('even', function(arg) {
     return typeof arg === 'number' && arg % 2 === 0;
-}, function(arg) {
-    return type.format(this, 'Expected {an} {even|odd} number{s} instead found ' + arg);
 });
-
 // Extension code
-type.extend('exists', function(arg) {
+type.e('exists', function(arg) {
     return typeof arg !== 'undefined' && arg !== null;
-}, function(arg) {
-    return type.format(this, 'Expected {} value{s} to {|not} exist instead found ' + arg);
 });
-
 function _implements(_interface, arg) {
     if(type(_interface).function) {
-        return _interface.apply(this, [arg]);
+        return _interface(arg);
     }
     type(_interface).assert.object;
     return Object.keys(_interface).every(function(key) {
@@ -39,121 +37,195 @@ function _implements(_interface, arg) {
 }
 
 // Extension code
-type.extendfn('implements', _implements, function(arg) {
-    return type.format(this, 'Expected {} object{s} to {|not} implement interface instead found ' + arg);
+type.ef('implements', _implements, function(_interface, arg) {
+    return this.format(['implements', JSON.stringify(_interface, function(key, val) {
+        if(key && type(val).function) {
+            return (val.name || "function");
+        }
+        return val;
+    })], [JSON.stringify(arg)]);
 });
-
 // Extension code
-type.extendfn('instanceof', function(constructor, arg) {
+type.ef('instanceof', function(constructor, arg) {
     type(constructor).assert.function;
     return arg instanceof constructor;
 }, function(constructor, arg) {
-    return type.format(this, 'Expected {an|a} {|non} instance{s} of ' + constructor.name + ' instead found ' + arg);
+    type(arg).assert.object;
+    return this.format(['instanceof', constructor.name], ['instanceof', arg.constructor.name, arg]);
 });
-
 // Extension code
-type.extend('integer', function(arg) {
+type.e('integer', function(arg) {
     return typeof arg === 'number' && !isNaN(arg) && (arg | 0) === arg;
-}, function(arg) {
-    return type.format(this, 'Expected {an|a} {|non} integer{s} instead found ' + arg);
 });
-
-
 // Extension code
-type.extendfn('lengthof', function(n, arg) {
+type.ef('lengthof', function(n, arg) {
     type(n).assert.number;
-    return util.length(arg) === n;
+    return type.util.length(arg) === n;
 }, function(n, arg) {
-    return type.format(this, 'Expected {an|a} object {|not} of length ' + n + ' instead found an object of length ' + util.length(arg));
+    return this.format(['lengthof', n], [this.type, 'lengthof', String(type.util.length(arg))]);
 });
-
 // Extension code
-type.extendfn('max', function(n, arg) {
+type.ef('max', function(n, arg) {
     type(n).assert.number;
     return typeof arg === 'number' && arg <= n;
 }, function(n, arg) {
-    return type.format(this, 'Expected {a} value{s} {less than or equal to|greater than} ' + n + ' instead found ' + arg);
+    return this.format(['max', n], [this.type, arg]);
 });
-
 // Extension code
-type.extendfn('min', function(n, arg) {
+type.ef('min', function(n, arg) {
     type(n).assert.number;
     return typeof arg === 'number' && arg >= n;
 }, function(n, arg) {
-    return type.format(this, 'Expected {a} value{s} {greater than or equal to|less than} ' + n + ' instead found ' + arg);
+    return this.format(['min', n], [this.type, arg]);
 });
-
 /* Taken from lodash */
 /* https://github.com/lodash/lodash/blob/6cb3460fcefe66cb96e55b82c6febd2153c992cc/isNative.js */
 var reRegExpChar = /[\\^$.*+?()[\]{}|]/g
 var reIsHostCtor = /^\[object .+?Constructor\]$/
-var reIsNative = RegExp('^' +
+var reIsNative   = RegExp('^' +
     Function.prototype.toString.call(Object.prototype.hasOwnProperty)
         .replace(reRegExpChar, '\\$&')
         .replace(/hasOwnProperty|(function).*?(?=\\\()| for .+?(?=\\\])/g, '$1.*?')
 );
 
 // Extension code
-type.extend('native', function(arg) {
+type.e('native', function(arg) {
     return (typeof arg === 'function' || typeof arg === 'object')
         && (typeof arg === 'function'
             ? reIsNative.test(Function.prototype.toString.call(arg))
             : reIsHostCtor.test('' + arg)
         );
-}, function(arg) {
-    type.format(this, 'Expected {a} native function{s} instead found ' + arg);
 });
-
 // Extension code
-type.extend('negative', function(arg) {
+type.e('negative', function(arg) {
     return typeof arg === 'number' && arg < 0;
-}, function(arg) {
-    return type.format('Expected {a} number{s} {|not} less than 0 instead found ' + arg);
 });
-
 // Extension code
-type.extend('object', function(arg) {
+type.e('object', function(arg) {
     return typeof arg === 'object' && arg !== null;
 });
-
 // Extension code
-type.extend('odd', function(arg) {
-    return typeof arg === 'number' && arg % 2 !== 0;
-}, function(arg) {
-    return type.format(this, 'Expected {an} {odd|even} number{s} instead found ' + arg);
+type.e('odd', function(arg) {
+    return typeof arg === 'number' && (arg - 1) % 2 === 0;
 });
-
 // Extension code
-type.extend('positive', function(arg) {
+type.ef('or', function(first, second, arg) {
+
+    var args = type.util.toArray(arguments);
+    var last = args.pop();
+
+    return args.some(function(test) {
+        return test(last);
+    });
+});
+// Extension code
+type.e('positive', function(arg) {
     return typeof arg === 'number' && arg > 0;
-}, function(arg) {
-    return type.format('Expected {a} number{s} {|not} greater than 0 instead found ' + arg);
 });
-
 // Extension code
-type.extendfn('range', function(min, max, arg) {
+type.ef('range', function(min, max, arg) {
     type(min).assert.number;
     type(max).assert.number;
     return typeof arg === 'number' && arg >= min && arg < max;
 }, function(min, max, arg) {
-    return type.format(this, 'Expected {a} value{s} {between|outside of} ' + min + ' and ' + max + ' instead found ' + arg);
+    return this.format(['between', min, 'and', max], [this.type, arg]);
 });
-
 // Define base types
 'undefined boolean number string symbol function'
     .split(' ')
     .forEach(function(name) {
-        type.extend(name, function(arg) {
+        type.e(name, function(arg) {
             return typeof arg === name;
         });
     });
-},{"./type-mark":3,"./util":4}],2:[function(require,module,exports){
-// Pull in extensions
+},{"./type-mark":4}],2:[function(require,module,exports){
+// Pull in extensions & modifiers
 require('./extensions');
+require('./modifiers');
 
 // Export type-mark
 module.exports = require('./type-mark');
-},{"./extensions":1,"./type-mark":3}],3:[function(require,module,exports){
+},{"./extensions":1,"./modifiers":3,"./type-mark":4}],3:[function(require,module,exports){
+var type = require('./type-mark');
+type.m('arrayof', function arrayof(test) {
+    return function() {
+
+        var that = this;
+        var args = type.util.toArray(arguments);
+        var last = args.pop();
+
+        return Array.isArray(last) && last.every(function(arg) {
+            return test.apply(that, args.concat([arg]));
+        });
+    };
+});
+type.m('assert', function assert(test, name) {
+    return function() {
+        if(!test.apply(this, arguments)) {
+            throw type.typeError(this, name);
+        }
+        return true;
+    };
+});
+
+/**
+ * Returns a type error based of a given TypeState.
+ */
+type.typeError = function typeError(state, name) {
+
+    type(state).assert.instanceof(type.TypeState);
+    type(name).assert.string;
+
+    var message = state._message || state.format([name], [state.type, state.value]);
+    var error = new TypeError(type(message).function
+        ? state.result(message)
+        : message
+    );
+    error.state = state;
+    return error;
+};
+type.m('collapse', function collapse(test) {
+    return function() {
+
+        var args = type.util.toArray(arguments);
+        args.pop();
+
+        for(var i in this._value) {
+            if(test.apply(this, args.concat([this._value[i]]))) {
+                this._return = this._value[i];
+                return true;
+            }
+        }
+        return false;
+    };
+});
+type.m('maybe', function maybe(test) {
+    return function() {
+
+        var args = type.util.toArray(arguments);
+        var last = args.pop();
+
+        return last === null || typeof last === 'undefined' || test.apply(this, args.concat([last]));
+    };
+});
+type.m('not', function not(test) {
+    return function() {
+        return !test.apply(this, arguments);
+    };
+});
+type.m('of', function of(test) {
+    return function() {
+
+        var that = this;
+        var args = type.util.toArray(arguments);
+        var last = args.pop();
+
+        return typeof last === 'object' && last !== null && Object.keys(last).every(function(key) {
+            return test.apply(that, args.concat([last[key]]));
+        });
+    };
+});
+},{"./type-mark":4}],4:[function(require,module,exports){
 var util = require('./util');
 
 /**
@@ -163,8 +235,9 @@ var util = require('./util');
  * @returns {TypeState}       new TypeState object
  */
 function type() {
-    return new TypeState([].slice.call(arguments));
+    return new TypeState(util.toArray(arguments));
 }
+type.util = util;
 
 /**
  * Constructor for TypeState object.
@@ -172,143 +245,98 @@ function type() {
  * @param {Array} value array of values to be tested
  */
 function TypeState(val) {
-    this.value = val[0];
-    this._value = val;
-    this._flags = 0;
-    this._args  = [];
+    this.value   = val[0]; // the value being tested
+    this._value  = val;    // all values passed to type
+    this._stack  = [];     // modifier stack
+    this._args   = [];     // arguments for test
+    this._return = true;   // return value on success
 }
 type.TypeState = TypeState;
-type.not       = { arrayof : {}, of : {} };
-type.arrayof   = { not : {} };
-type.of        = { not : {} };
-type.util      = util;
 
 TypeState.prototype = {
 
     /**
-     * Resolves a TypeState either to the same TypeState or false.
+     * Given a test resolves that test using the current state.
      *
-     * @param   {string}   name    the name of the test to appear in the error
-     *                             message
-     * @param   {function} test    the test function
-     * @param   {string}   message the error message function (optional)
-     * @returns {mixed}
+     * @param   {string}   name the name of the test
+     * @param   {function} test the test function
+     * @returns {mixed}         return result, typically a boolean
      */
-    resolve : function(name, test, message) {
-
-        var result = false;
-        var state  = this;
-
-        // Default Case
-        if(!state._flags) {
-            return state.result(test) && state;
+    resolve : function(name, test) {
+        for(var i = this._stack.length - 1; i >= 0; i--) {
+            test = this._stack[i].call(this, test, name);
         }
-
-        // Swap out test for not test
-        if(state._flags & modifiers.not) {
-            test = util.not(test);
-        }
-
-        // Handle arrayof
-        if(state._flags & modifiers.arrayof) {
-            if(state._flags & modifiers.collapse) {
-                throw new TypeError('arrayof modifier does not support collapse.');
-            }
-            if(state._flags & modifiers.of) {
-                throw new TypeError('arrayof modifier does not suppoer of');
-            }
-            result = state.result(util.arrayof(test));
-
-        // Handle of
-        } else if(state._flags & modifiers.of) {
-            if(state._flags & modifiers.collapse) {
-                throw new TypeError('of modifier does not support collapse.');
-            }
-            result = state.result(util.of(test));
-
-        // Handle collapse
-        } else if(state._flags & modifiers.collapse) {
-            for(var i in state._value) {
-                if(state._value.hasOwnProperty(i)) {
-                    var arg = state._value[i];
-                    if(state.result(test, arg, typeof arg === 'undefined')) {
-                        return arg;
-                    }
-                }
-            }
-            result = false;
-
-        // Handle default case
-        } else {
-            result = state.result(test);
-        }
-
-        // Handle assert
-        if(!result && (state._flags & modifiers.assert)) {
-            var error = new TypeError(
-                state.result(state._message || message || function() {
-                    return type.format(state, 'Expected {} {|non} ' + name + '{s} instead found ' + state.type);
-                })
-            );
-            if(!(state._flags & modifiers.debug) && type(error.stack).string) {
-                error.stack = error.stack
-                    .replace(/\n.*/, '')
-                    .replace(/\n.*/, '');
-            }
-            throw error;
-        }
-
-        return result && state;
+        var result = this.result(test);
+        return result ? this._return : result;
     },
 
     /**
-     * Sets a custom error message used with assertions during  test resolution.
+     * Calls a function with the same values that a test currently being
+     * resolved would be called with.
      *
-     * @param   {function}  message set a custom error message function
-     * @returns {TypeState}         this for chaining
+     * @param   {function} test the function to recieve the arguments
+     * @returns {mixed}         the return value of your function
+     */
+    result : function(test) {
+        return test.apply(this, this._args.concat([this.value]));
+    },
+
+    /**
+     * Provide an error message to use instead of the default for the current
+     * type assertion.
+     *
+     * @param   {function | string} msg the message
+     * @returns {TypeState}             the current TypeState for chaining
      */
     message : function(msg) {
-        if(type(msg).string) {
-            this._message = function() { return msg };
-            return this;
-        }
-        type(msg).assert.function;
+        type(msg).string || type(msg).assert.function;
         this._message = msg;
         return this;
     },
 
     /**
-     * Compute the result of a test given the current TypeState. The arguments
-     * passed to the test and the test value are passed. The value can be
-     * replaced with a new passed value
+     * Returns a formatted error string given a list of strings for the asserted
+     * and found values.
      *
-     * @param   {function} test     the test function
-     * @param   {mixed}    argument a replacement argument (optional)
-     * @param   {boolean}  undef    true if arg is undefined (optional)
-     * @returns {boolean}           true or false result
+     * @param   {Array} asserted the asserted values
+     * @param   {Array} found    the found values
+     * @returns {string}         the formatted error string
      */
-    result : function(test, arg, undef) {
-        arg = typeof arg !== 'undefined' || undef ? arg : this.value
-        return test.apply(this, this._args.concat([arg]));
+    format : function(asserted, found) {
+        return "Asserted: " + this.stack.filter(function(mod) {
+            return mod !== 'assert';
+        }).concat(asserted).join(' ') + " -- Found: " + found.join(' ');
     }
-}
+
+};
 
 /**
- *
+ * Constructor for ShadowTypeState object.
  */
-type.format = function format(state, fmt) {
-    var of     = state._flags & (modifiers.arrayof | modifiers.of);
-    var not    = state._flags & modifiers.not;
-    var prefix = state._flags & modifiers.arrayof
-        ? 'an array of '
-        : 'an object of ';
-    return fmt
-        .replace(/\{s\}/g, of ? 's' : ''  )
-        .replace(/\{([^}]*?)\}/, of  ? prefix : '{$1}')
-        .replace(/\{([^}]*?)\|([^}]*?)\}/g, not ? '$2' : '$1')
-        .replace(/{([^}]*?)}/g, '$1')
-        .replace(/\s+/g, ' ');
-};
+function ShadowTypeState() {
+    this._stack = [];
+}
+
+ShadowTypeState.prototype = {
+
+    // Copy from TypeState prototype
+    message : TypeState.prototype.message,
+
+    /**
+     * Creates a new TypeState from the current ShadowTypeState.
+     *
+     * @param   {Array}             args    the args to the current test
+     * @param   {function | string} message the override message if any
+     * @returns {TypeState}                 the newly created TypeState
+     */
+    toTypeState : function(args, message) {
+        var state = new TypeState([args.pop()]);
+        state._stack   = this._stack;
+        state._message = this._message || message;
+        state._args    = args;
+        return state;
+    }
+}
 
 // Define the "type" parameter
 util.define(TypeState.prototype, 'type', function() {
@@ -317,31 +345,11 @@ util.define(TypeState.prototype, 'type', function() {
         : typeof this.value
 });
 
-/**
- * Creates a new modifier on TypeState. Modifiers or the current flags with
- * themselves.
- *
- * @param {string} name the name of the modifier
- * @param {number} flag the bitwise mask
- */
-function modifier(name, flag) {
-    util.define(TypeState.prototype, name, function() {
-        this._flags |= flag;
-        return this;
+// Define a readable modifier stack
+util.define(TypeState.prototype, 'stack', function() {
+    return this._stack.map(function(mod) {
+        return mod.name;
     });
-}
-
-// Create modifiers
-var modifiers = {
-    not      : 1,
-    arrayof  : 2,
-    of       : 4,
-    assert   : 8,
-    collapse : 16,
-    debug    : 32
-};
-Object.keys(modifiers).forEach(function(name) {
-    modifier(name, modifiers[name])
 });
 
 /**
@@ -350,21 +358,13 @@ Object.keys(modifiers).forEach(function(name) {
  * @param   {string}   name    the name of the test
  * @param   {function} test    the test function
  * @param   {function} message the error message function (optional)
- * @returns {function}         the type function for chaining
  */
-type.extend = function extend(name, test, message) {
+type.extend = type.e = function extend(name, test, message) {
     util.define(TypeState.prototype, name, function() {
-        return this.resolve(name, test, message);
+        this._message = this._message || message;
+        return this.resolve(name, test);
     });
-    type[name]             = test;
-    type.not[name]         = util.not(test);
-    type.not.arrayof[name] = util.arrayof(type.not[name]);
-    type.not.of[name]      = util.of(type.not[name]);
-    type.arrayof[name]     = util.arrayof(test);
-    type.of[name]          = util.of(test);
-    type.arrayof.not[name] = type.not.arrayof[name];
-    type.of.not[name]      = type.not.of[name];
-    return this;
+    addExtension(name, test, message);
 }
 
 /**
@@ -373,142 +373,122 @@ type.extend = function extend(name, test, message) {
  * @param   {string}   name    the name of the test
  * @param   {function} test    the test function
  * @param   {function} message the error message function (optional)
- * @returns {function}         the type function for chaining
  */
-type.extendfn = function extendfn(name, test, message) {
+type.extendfn = type.ef = function extendfn(name, test, message) {
     TypeState.prototype[name] = function() {
-        this._args = [].slice.call(arguments);
-        return this.resolve(name, test, message);
+        this._args    = util.toArray(arguments);
+        this._message = this._message || message;
+        return this.resolve(name, test);
     }
-    test                   = util.curry(test);
-    type[name]             = test;
-    type.not[name]         = util.not(test);
-    type.not.arrayof[name] = util.arrayof(type.not[name]);
-    type.not.of[name]      = util.of(type.not[name]);
-    type.arrayof[name]     = util.arrayof(test);
-    type.of[name]          = util.of(test);
-    type.arrayof.not[name] = type.not.arrayof[name];
-    type.of.not[name]      = type.not.of[name];
-    return this;
+    addExtension(name, test, message);
+}
+
+/**
+ * Modify TypeState with a new modification function that transorms a test.
+ *
+ * @param {name}     name the name of the modifier
+ * @param {function} mod  the modifier function
+ */
+type.modify = type.m = function extendmod(name, mod) {
+    var fn = function() {
+        this._stack.push(mod);
+        return this;
+    }
+    util.define(ShadowTypeState.prototype, name, fn);
+    util.define(TypeState.prototype, name, fn);
+    util.define(type, name, function() {
+        return (new ShadowTypeState())[name];
+    });
+}
+
+/**
+ * Extend type and ShadowTypeState to support a new extension.
+ *
+ * @param {string}            name    the name of the extension
+ * @param {function}          test    the extension test
+ * @param {function | string} message the default message for the extension
+ */
+function addExtension(name, test, message) {
+    type[name] = util.curry(test);
+    util.define(ShadowTypeState.prototype, name, function() {
+        var sstate = this;
+        return util.curry(function() {
+            return sstate.toTypeState(util.toArray(arguments), message).resolve(name, test);
+        }, test.length);
+    });
 }
 
 module.exports = type;
-},{"./util":4}],4:[function(require,module,exports){
-var util = {
+},{"./util":5}],5:[function(require,module,exports){
+/**
+ * Defines a function based property on an object.
+ *
+ * @param   {object}   obj  the object to define a property on
+ * @param   {string}   name the name of the property
+ * @param   {function} fn   the property function
+ * @returns {object}        the util object for chaining
+ */
+function define(obj, name, fn) {
+    Object.defineProperty(obj, name, { get : fn });
+}
 
-    /**
-     * Returns a new function that returns the notted value of the passed in
-     * function. This supports curried function so long as the final function
-     * does not return a function.
-     *
-     * @param   {function} fn the function to not
-     * @returns {function}    the notted function
-     */
-    not : function(fn) {
-        return function() {
-            var result = fn.apply(this, arguments);
-            return typeof result !== 'function'
-                ? !result
-                : util.not(result);
-        }
-    },
+/**
+ * Converts an array like object (arguments) to an Array.
+ *
+ * @param   {mixed} arg the array like object
+ * @returns {Array}     the converted array
+ */
+function toArray(arg) {
+    return Array.prototype.slice.call(arg);
+}
 
-    /**
-     * Returns a new function that returns an array reduced value of passed in
-     * function. This supports curried functions so long as the final function
-     * does not return a function
-     *
-     * @param   {function} fn the function to array reduce
-     * @returns {function}     the array reduced function
-     */
-    arrayof : function(fn) {
-        return function() {
-
-            var that   = this;
-            var result = fn.apply(that, arguments);
-            var args   = [].slice.call(arguments);
-            var array  = args.pop();
-
-            if(typeof result !== 'function') {
-                return Array.isArray(array) && array.every(function(arg) {
-                    return fn.apply(that, args.concat([arg]));
-                });
-            }
-            return util.arrayof(result);
-        }
-    },
-
-    /**
-     * Returns a new function that returns an object reduced value of passed in
-     * function. This supports curried functions so long as the final function
-     * does not return a function
-     *
-     * @param   {function} fn the function to array reduce
-     * @returns {function}     the object reduced function
-     */
-    of : function(fn) {
-        return function() {
-
-            var that   = this;
-            var result = fn.apply(that, arguments);
-            var args   = [].slice.call(arguments);
-            var obj    = args.pop();
-
-            if(typeof result !== 'function') {
-                return typeof obj === 'object' && obj !== null && Object.keys(obj).every(function(key) {
-                    return fn.apply(that, args.concat([obj[key]]));
-                });
-            }
-            return util.of(result);
-        }
-    },
-
-    /**
-     * Defines a function based property on an object.
-     *
-     * @param   {object}   obj  the object to define a property on
-     * @param   {string}   name the name of the property
-     * @param   {function} fn   the property function
-     * @returns {object}        the util object for chaining
-     */
-    define : function(obj, name, fn) {
-        Object.defineProperty(obj, name, { get : fn });
-    },
-
-    /**
-     * Returns the length of the object, array, or string passed to the function. If
-     * any other types are passed, undefined is returned.
-     *
-     * @param   {mixed} arg the value to get the length of
-     * @returns {mixed}     the length if applicable or undefined
-     */
-    length : function(arg) {
-        if(typeof arg === 'string' || Array.isArray(arg)) {
-            return arg.length;
-        }
-        if(arg !== null && typeof arg === 'object') {
-            return Object.keys(arg).length;
-        }
-    },
-
-    // http://blog.carbonfive.com/2015/01/14/gettin-freaky-functional-wcurried-javascript/
-    curry : function(fn) {
-        var arity = fn.length;
-        return function f1() {
-            var args = [].slice.call(arguments, 0);
-            if (args.length >= arity) {
-                return fn.apply(null, args);
-            } else {
-                return function f2() {
-                    var args2 = [].slice.call(arguments, 0);
-                    return f1.apply(null, args.concat(args2));
-                }
-            }
-        };
+/**
+ * Returns the length of the object, array, or string passed to the function. If
+ * any other types are passed, undefined is returned.
+ *
+ * @param   {mixed} arg the value to get the length of
+ * @returns {mixed}     the length if applicable or undefined
+ */
+function length(arg) {
+    if(typeof arg === 'string' || Array.isArray(arg)) {
+        return arg.length;
     }
+    if(arg !== null && typeof arg === 'object') {
+        return Object.keys(arg).length;
+    }
+}
 
+/**
+ * Based off implementation developed here:
+ * http://blog.carbonfive.com/2015/01/14/gettin-freaky-functional-wcurried-javascript/
+ *
+ * @param   {function} fn    the function to curry
+ * @param   {number}   arity the arity (optional)
+ * @returns {function}       the curried function
+ */
+function curry(fn, arity) {
+    arity = arity || fn.length;
+    if(arity <= 1) {
+        return fn;
+    }
+    return function f1() {
+        var args1 = toArray(arguments);
+        if (args1.length >= arity) {
+            return fn.apply(null, args1);
+        } else {
+            return function f2() {
+                var args2 = toArray(arguments);
+                return f1.apply(null, args1.concat(args2));
+            }
+        }
+    };
+}
+
+module.exports = {
+    define      : define,
+    toArray     : toArray,
+    length      : length,
+    curry       : curry
 };
-
-module.exports = util;
 },{}]},{},[2])(2)
 });

@@ -46,23 +46,18 @@ multi('../src/index.js', '../type-mark.min.js', function(type) {
                 });
             });
             describe('assert', function() {
-                it('should throw a TypeError with a message indicating why the check failed', function() {
-                    assert.throws(function() {
-                        type(4).assert.string;
-                    }, /TypeError: Expected string instead found number/);
-                });
                 it('should assert that x is an array with length 10', function() {
                     var x;
                     x = 4;
                     assert.throws(function() {
-                        type(x).assert.array.lengthof(10);
-                    }, /TypeError: Expected array instead found number/);
+                        type(x).assert.and(type.array, type.lengthof(10));
+                    }, TypeError);
                     x = [1, 2, 3];
                     assert.throws(function() {
-                        type(x).assert.array.lengthof(10);
-                    }, /TypeError: Expected an object of length 10 instead found an object of length 3/);
+                        type(x).assert.and(type.array, type.lengthof(10));
+                    }, TypeError);
                     x = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
-                    assert(type(x).assert.array.lengthof(10));
+                    assert(type(x).assert.and(type.array, type.lengthof(10)));
                 });
                 it('should allow for a custom error message', function() {
                     assert.throws(function() {
@@ -108,7 +103,7 @@ multi('../src/index.js', '../type-mark.min.js', function(type) {
                 });
             });
             describe('collapse', function() {
-                it('should return the first valid passe to type that matches the check', function() {
+                it('should return the first valid value passed to type that matches the check', function() {
                     assert.strictEqual(type('string', {}, [], 42, true, Math.PI).collapse.number, 42);
                 });
             });
@@ -125,13 +120,108 @@ multi('../src/index.js', '../type-mark.min.js', function(type) {
             });
         });
         describe('interfaces', function() {
-
+            it('should test if a or b implement the interface', function() {
+                var interface = {
+                    name : type.string,
+                    age  : type.integer,
+                    coordinate : {
+                        x : type.number,
+                        y : type.number,
+                        z : type.number
+                    }
+                };
+                var a = {
+                    name : 'bear',
+                    age  : 14.5,
+                    coordinate : {
+                        x : 0.0,
+                        y : 1.1,
+                        z : 0.1
+                    }
+                };
+                var b = {
+                    name : 'bird',
+                    age  : 1,
+                    coordinate : {
+                        x : 0.0,
+                        y : 0.0,
+                        z : 14.0,
+                        flag : true
+                    }
+                };
+                assert.strictEqual(type(a).implements(interface), false);
+                assert(type(b).implements(interface));
+            });
+            it('should support nested interfaces', function() {
+                var nestedInterface = {
+                    coordinates : type.arrayof.implements({
+                        x : type.number,
+                        y : type.number
+                    })
+                };
+                var a = {
+                    coordinates : { x : 4, y : 6 }
+                };
+                var b = {
+                    coordinates : [
+                        { x : 1, y : 2 },
+                        { x : 3, y : 4 }
+                    ]
+                }
+                assert.strictEqual(type(a).implements(nestedInterface), false);
+                assert(type(b).implements(nestedInterface));
+            });
+            it('should support arbitrary functions', function() {
+                var interface = {
+                    three : function isThree(arg) {
+                        return arg === 3 || /^(3|three|iii)$/i.test(arg);
+                    }
+                };
+                var a = { three : 3 };
+                var b = { three : '3' };
+                var c = { three : 'III' };
+                var d = { three : 3.1 };
+                var e = { three : 'iiiv' };
+                assert(type(a).implements(interface));
+                assert(type(b).implements(interface));
+                assert(type(c).implements(interface));
+                assert.strictEqual(type(d).implements(interface), false);
+                assert.strictEqual(type(e).implements(interface), false);
+            });
         });
         describe('extend', function() {
-
+            it('should allow you to implement custom tests', function() {
+                function isThree(arg) {
+                    return arg === 3 || /3|three|iii/i.test(arg);
+                }
+                type.extend('isThree', isThree, function(arg) {
+                    return arg + ' is not three :(';
+                });
+                assert(type(3).isThree);
+                assert(type.arrayof.isThree([3, 'THREE', 'IiI']));
+                assert.throws(function() {
+                    type('three').assert.not.isThree;
+                }, /TypeError: three is not three :\(/)
+            });
         });
         describe('extendfn', function() {
-
+            it('should allow you to implement custom tests', function() {
+                function threeSumTo100(n1, n2, arg) {
+                    return n1 + n2 + arg === 100;
+                }
+                type.extendfn('threeSumTo100', threeSumTo100, function(n1, n2, arg) {
+                    return n1 + ' + ' + n2 + ' + ' + arg + ' does not equal 100';
+                });
+                assert(type(50).threeSumTo100(25, 25));
+                assert.strictEqual(type('100').threeSumTo100(0, 0), false);
+                assert(type.arrayof.threeSumTo100(90, 5, [5, 5, 5]));
+                assert.strictEqual(type.threeSumTo100(33)(33)(33), false);
+            });
+            it('should be curryable', function() {
+                var twoSumTo50 = type.threeSumTo100(50);
+                assert(twoSumTo50(25, 25));
+                assert.strictEqual(twoSumTo50(50, 50), false);
+            });
         });
     });
     describe('api', function() {

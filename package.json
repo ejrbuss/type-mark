@@ -4,9 +4,9 @@
   "description": "A small library for checking types",
   "main": "./src/index",
   "scripts": {
-    "build": "node src/build.js && browserify --standalone type ./src/index.js > type-mark.js && uglifyjs --compress --mangle --output type-mark.min.js -- type-mark.js && cp type-mark.js docs/js/type-mark.js",
-    "test": "npm run build && nyc mocha --reporter dot --timeout=30000 --recursive test --bail",
-    "site": "cd docs && bundle exec jekyll serve",
+    "build": "node src/build.js && browserify --standalone type ./src/index.js > type-mark.js && uglifyjs --output type-mark.min.js -- type-mark.js && cp type-mark.js docs/js/type-mark.js",
+    "test": "npm run build && nyc mocha --no-color --reporter dot --timeout=30000 --recursive test --bail",
+    "site": "cp type-mark.js docs/js/type-mark.js && cd docs && bundle exec jekyll serve",
     "version": "node version.js"
   },
   "repository": {

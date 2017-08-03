@@ -1,3 +1,8 @@
+---
+---
+
+$primary-color: #00A79D;
+
 h1 code,
 h2 code,
 h3 code,
@@ -6,6 +11,16 @@ h5 code,
 h6 code {
     background-color: inherit;
     color: inherit !important;
+}
+
+.content a {
+    color: $primary-color !important;
+}
+.timeline-icon {
+    background-color: $primary-color !important;
+}
+.nav-item.active {
+    border-left: 2px solid $primary-color;
 }
 
 #top-nav {
@@ -21,8 +36,7 @@ h6 code {
     overflow-y: auto !important;
     overflow-x: auto !important;
     height: calc(100% - 20px) !important;
-}
-
-.nav-item.active {
-    border-left: 2px solid #00A79D;
+    a:hover {
+        color: $primary-color;
+    }
 }

@@ -66,11 +66,24 @@ multi('../src/index.js', '../type-mark.min.js', function(type) {
             'interface'    : true,
             'notInterface' : false
         });
-
-        it('should have an error message specifying the interface and object', function() {
+        it('should throw an error if passed a non object as an interface', function() {
             assert.throws(function() {
-                type({}).assert.implements({ a : type.array });
-            }, /TypeError: Expected object to implement interface instead found \[object Object\]/);
+                type({}).implements(12);
+            });
+        });
+        it('should throw an error if passed an object with non function kes', function() {
+            assert.throws(function() {
+                type({}).implements({ x : 12 });
+            });
+        });
+        it('should throw an error showing the interface and given object', function() {
+            var interface = {
+                x : function testX() { return false; },
+                y : function testY() { return false; }
+            };
+            assert.throws(function() {
+                type({ x : 2, y : 3 }).assert.implements(interface);
+            }, /TypeError: Asserted: implements {"x":"testX","y":"testY"} -- Found: {"x":2,"y":3}/);
         });
     });
 });

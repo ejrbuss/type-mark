@@ -14,8 +14,9 @@ function helper(type, test, mapping) {
 
     values.forEach(function(valueSet, key) {
 
-        var result = results[key];
-        var name   = names[key];
+        var result      = results[key];
+        var name        = names[key];
+        var maybeResult = results[key] || name === 'null' || name === 'undefined';
 
         // Check test ant not.test
         it('should return ' + result + ' for ' + name, function() {
@@ -30,15 +31,29 @@ function helper(type, test, mapping) {
                 assert.strictEqual(!!type.not[test](value), !result);
             });
         });
+        // Check maybe.test and maybe.not.test
+        it('should return ' + maybeResult + ' for .maybe ' + name, function() {
+            valueSet.forEach(function(value) {
+                assert.strictEqual(!!type(value).maybe[test], maybeResult);
+                assert.strictEqual(!!type.maybe[test](value), maybeResult);
+            });
+        });
+        it('should return ' + !maybeResult + ' for .not.maybe ' + name, function() {
+            valueSet.forEach(function(value) {
+                assert.strictEqual(!!type(value).not.maybe[test], !maybeResult);
+                assert.strictEqual(!!type.not.maybe[test](value), !maybeResult);
+            });
+        });
+
 
         // Check arrayof.test and not.arrayof.test
         it('should return ' + result + ' for .arrayof ' + name + 's', function() {
             assert.strictEqual(!!type(valueSet).arrayof[test], result);
             assert.strictEqual(!!type.arrayof[test](valueSet), result);
         });
-        it('should return ' + result + ' for .not.arrayof ' + name + 's', function() {
-            assert.strictEqual(!!type(valueSet).not.arrayof[test], !result);
-            assert.strictEqual(!!type.not.arrayof[test](valueSet), !result);
+        it('should return ' + result + ' for .arrayof.not ' + name + 's', function() {
+            assert.strictEqual(!!type(valueSet).arrayof.not[test], !result);
+            assert.strictEqual(!!type.arrayof.not[test](valueSet), !result);
         });
 
         // Check of.test and not.of.test
@@ -46,21 +61,20 @@ function helper(type, test, mapping) {
             assert.strictEqual(!!type(valueSet).of[test], result);
             assert.strictEqual(!!type.of[test](valueSet), result);
         });
-        it('should return ' + !result + ' for .not.of ' + name + 's', function() {
-            assert.strictEqual(!!type(valueSet).not.of[test], !result);
-            assert.strictEqual(!!type.not.of[test](valueSet), !result);
+        it('should return ' + !result + ' for .of.not ' + name + 's', function() {
+            assert.strictEqual(!!type(valueSet).of.not[test], !result);
+            assert.strictEqual(!!type.of.not[test](valueSet), !result);
         });
 
         // Check collapse.test and not.collapse.test
         it('should .collapse to return the first ' + test, function() {
-            assert.strictEqual(type.apply(null, valueSet).collapse[test],     result  ? valueSet[0] : result);
-            assert.strictEqual(type.apply(null, valueSet).not.collapse[test], !result ? valueSet[0] : !result);
+            assert.strictEqual(type.apply(null, valueSet).collapse[test],      result ? valueSet[0] : result);
+            assert.strictEqual(type.apply(null, valueSet).collapse.not[test], !result ? valueSet[0] : !result);
         });
-
         // Check assert.test
         valueSet.forEach(function(value) {
             assert.throws(function() {
-                result ? type(value).not.assert[test] : type(value).assert[test];
+                result ? type(value).assert.not[test] : type(value).assert[test];
             }, TypeError);
         });
     });

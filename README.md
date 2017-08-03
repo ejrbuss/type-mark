@@ -16,8 +16,10 @@ With type-mark checking for `null` is as easy as
 > type(null).object
 false
 ```
-Not to mention the added benifits of [modifiers](#modifiers), [interfaces](#interfaces), and
-[custom validation](#writing-your-own-tests).
+Not to mention the added benifits of
+[modifiers](http://www.ejrbuss.net/type-mark/#modifiers),
+[interfaces](http://www.ejrbuss.net/type-mark/#interfaces), and
+[custom validation](http://www.ejrbuss.net/type-mark/#writing-your-own-tests).
 
 ## Get It
 
@@ -50,8 +52,7 @@ type-mark is available through [npm](https://www.npmjs.com/). When using
 $ npm install type-mark
 ```
 
-In order to actually use type-mark in your Node project you will need to
-require it in using
+To use type-mark in your Node project you will need to require it
 ```js
 var type = require('type-mark');
 ```
@@ -75,13 +76,13 @@ following global dependencies
 - [uglify-js](https://www.npmjs.com/package/uglify-js) and
 - [jekyll/bundle](https://jekyllrb.com/).
 
-The following npm scripts are made avaialble
+The following npm scripts are made available
 
 ```bash
-$ npm run test     # run tests
-$ npm run coverage # generate istanbul html report
+$ npm run test     # run tests and code coverage
 $ npm run build    # build type-mark.js and type-mark.min.js for the client
 $ npm run site     # run the docs site
+$ npm run version  # update version number and cdn
 ```
 
 ## [Getting Started](http://www.ejrbuss.net/type-mark/#getting-started)

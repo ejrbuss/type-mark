@@ -33,6 +33,8 @@ ratings:
 exclude_paths:
 - test/
 - docs/
+- src/extensions.js
+- stc/modifiers.js
 - ./type-mark.js
 - ./type-mark.min.js
 - ./src/polyfills.js

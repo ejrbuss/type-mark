@@ -1,8 +1,6 @@
-var type = require('../type-mark');
-
 function _implements(_interface, arg) {
     if(type(_interface).function) {
-        return _interface.apply(this, [arg]);
+        return _interface(arg);
     }
     type(_interface).assert.object;
     return Object.keys(_interface).every(function(key) {
@@ -11,6 +9,11 @@ function _implements(_interface, arg) {
 }
 
 // Extension code
-type.extendfn('implements', _implements, function(arg) {
-    return type.format(this, 'Expected {} object{s} to {|not} implement interface instead found ' + arg);
+type.extendfn('implements', _implements, function(_interface, arg) {
+    return this.format(['implements', JSON.stringify(_interface, function(key, val) {
+        if(key && type(val).function) {
+            return (val.name || "function");
+        }
+        return val;
+    })], [JSON.stringify(arg)]);
 });

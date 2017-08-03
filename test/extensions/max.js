@@ -20,11 +20,15 @@ multi('../src/index.js', '../type-mark.min.js', function(type) {
             'max'       : true,
             'min'       : false
         });
-
-        it('should have an error message specifying the maximum value', function() {
+        it('should throw an error if it not passed a number', function() {
             assert.throws(function() {
-                type(112).assert.max(99);
-            }, /TypeError: Expected a value less than or equal to 99 instead found 112/);
+                type({}).max('string');
+            });
+        });
+        it('should throw an error with the maximum value', function() {
+            assert.throws(function() {
+                type(12).assert.max(5);
+            }, /TypeError: Asserted: max 5 -- Found: number 12/);
         });
     });
 });

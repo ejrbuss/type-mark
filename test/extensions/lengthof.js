@@ -20,11 +20,20 @@ multi('../src/index.js', '../type-mark.min.js', function(type) {
             'lengthof'    : true,
             'notLengthof' : false
         });
-
-        it('should have an error message specifying the correct length', function() {
+        it('should throw an error if it not passed a number', function() {
             assert.throws(function() {
-                type([1, 2, 3]).assert.lengthof(12);
-            }, /TypeError: Expected an object of length 12 instead found an object of length 3/);
+                type({}).lengthof('string');
+            });
+        });
+        it('should throw an error with the expected and actual length', function() {
+            assert.throws(function() {
+                type([1, 2, 3]).assert.lengthof(5);
+            }, /TypeError: Asserted: lengthof 5 -- Found: object lengthof 3/);
+        });
+        it('should throw an error with the expected and undefined if the argument is unemerable', function() {
+            assert.throws(function() {
+                type(12).assert.lengthof(5);
+            }, /TypeError: Asserted: lengthof 5 -- Found: number lengthof undefined/);
         });
     });
 });

@@ -41,11 +41,11 @@ multi('../src/index.js', '../type-mark.min.js', function(type) {
                 });
             });
             describe('.resolve()', function() {
-                it('should return itself when given a passing test', function() {
+                it('should return true when given a passing test', function() {
                     var ts = type();
                     assert.strictEqual(ts.resolve('', function() {
                         return true;
-                    }), ts);
+                    }), true);
                 });
                 it('should return false when given a failing test', function() {
                     var ts = type();
@@ -59,18 +59,18 @@ multi('../src/index.js', '../type-mark.min.js', function(type) {
                         return true;
                     }), false);
                 });
-                it('should return itself when given a notted failing test', function() {
+                it('should return true when given a notted failing test', function() {
                     var ts = type().not;
                     assert.strictEqual(ts.resolve('', function() {
                         return false;
-                    }), ts);
+                    }), true);
                 });
                 it('should pass each item to the test during arrayof', function() {
                     var ts     = type([1, 2, 3, 4]).arrayof;
-                    var expect = 0; // -1 for curry check
+                    var expect = 1;
                     assert.strictEqual(ts.resolve('', function(arg) {
                         return (arg === expect++);
-                    }), ts);
+                    }), true);
                 });
                 it('should fail when not passed an array', function() {
                     var ts = type({ a : 1, b : 2, c : 3}).arrayof;
@@ -84,22 +84,6 @@ multi('../src/index.js', '../type-mark.min.js', function(type) {
                         return true;
                     }), false);
                 });
-                it('should throw a TypeError if arrayof is called with collapse', function() {
-                    var ts = type().arrayof.collapse;
-                    assert.throws(function() {
-                        ts.resolve('', function() {
-                            return true;
-                        });
-                    }, TypeError, 'arrayof modifier does not support collapse');
-                });
-                it('should throw a TypeError if arrayof is called with of', function() {
-                    var ts = type().arrayof.of;
-                    assert.throws(function() {
-                        ts.resolve('', function() {
-                            return true;
-                        });
-                    }, TypeError, 'arrayof modifier does not support of');
-                });
                 it('should pass each value to the test during of', function() {
                     var ts  = type({ a : 1, b : 2, c : 3}).of;
                     var sum = 0;
@@ -108,7 +92,7 @@ multi('../src/index.js', '../type-mark.min.js', function(type) {
                             sum += arg;
                         }
                         return typeof arg === 'number';
-                    }), ts);
+                    }), true);
                     assert.strictEqual(sum, 6);
                 });
                 it('should compose of with not', function() {
@@ -116,14 +100,6 @@ multi('../src/index.js', '../type-mark.min.js', function(type) {
                     assert.strictEqual(ts.resolve('', function(arg) {
                         return true;
                     }), false);
-                });
-                it('should throw a TypeError if of is called with collapse', function() {
-                    var ts = type().of.collapse;
-                    assert.throws(function() {
-                        ts.resolve('', function() {
-                            return true;
-                        });
-                    }, TypeError, 'of modifier does not support collapse');
                 });
                 it('should pass each parameter to the test during collapse until a pass', function() {
                     var ts = type(1, 2, 3, 4).collapse;
@@ -167,16 +143,6 @@ multi('../src/index.js', '../type-mark.min.js', function(type) {
                         });
                     }, /TypeError: test/);
                 });
-                it('should throw a TypeError with a passed message', function() {
-                    var ts = type('test').assert;
-                    assert.throws(function() {
-                        ts.resolve('', function(arg) {
-                            return false;
-                        }, function(arg) {
-                            return arg;
-                        });
-                    }, /TypeError: test/);
-                });
             });
             describe('.message()', function() {
                 it('should set ._message', function() {
@@ -213,12 +179,6 @@ multi('../src/index.js', '../type-mark.min.js', function(type) {
                         assert.strictEqual(arg, 'test');
                     });
                 });
-                it('should apply passed variable instead of value', function() {
-                    var ts = type('value');
-                    ts.result(function(arg) {
-                        assert.strictEqual(arg, 'test');
-                    }, 'test');
-                });
                 it('should return the result of test', function() {
                     var ts = type();
                     assert.strictEqual(ts.result(function() {
@@ -241,7 +201,7 @@ multi('../src/index.js', '../type-mark.min.js', function(type) {
             });
             it('should create a new valid test', function() {
                 var ts = type(true);
-                assert.strictEqual(ts.test, ts);
+                assert.strictEqual(ts.test, true);
             });
             it('should create a test composible with not', function() {
                 var ts = type(true).not;
@@ -249,13 +209,13 @@ multi('../src/index.js', '../type-mark.min.js', function(type) {
             });
             it('should create a test composible with arrayof', function() {
                 var ts = type([1, 2, 3]).arrayof;
-                assert.strictEqual(ts.test, ts);
+                assert.strictEqual(ts.test, true);
                 ts = type([1, 2, 3, 0]).arrayof;
                 assert.strictEqual(ts.test, false);
             });
             it('should create a test composible with of', function() {
                 var ts = type({ a : 1, b : 2, c : 3 }).of;
-                assert.strictEqual(ts.test, ts);
+                assert.strictEqual(ts.test, true);
                 ts = type({ a : 1, b : 2, c : 3, d : 0 }).of;
                 assert.strictEqual(ts.test, false);
             });
@@ -289,7 +249,7 @@ multi('../src/index.js', '../type-mark.min.js', function(type) {
             });
             it('should create a new valid test', function() {
                 var ts = type(false);
-                assert.strictEqual(ts.testfn(type.test, true), ts);
+                assert.strictEqual(ts.testfn(type.test, true), true);
             });
             it('should create a test composible with not', function() {
                 var ts = type(false).not;
@@ -297,10 +257,10 @@ multi('../src/index.js', '../type-mark.min.js', function(type) {
             });
             it('should create a test composible with arrayof', function() {
                 var ts     = type([1, 2, 3]).arrayof;
-                var expect = 0; // -1 for curry check
+                var expect = 1;
                 assert.strictEqual(ts.testfn(function(arg1, arg2) {
                     return arg1 === 1 && arg2 === expect++;
-                }, 1), ts);
+                }, 1), true);
             });
             it('should create a test composible with of', function() {
                 var ts     = type({ a : 1, b : 2, c : 3 }).of;
@@ -310,7 +270,7 @@ multi('../src/index.js', '../type-mark.min.js', function(type) {
                         sum += arg2;
                     }
                     return arg1 === 1;
-                }, 1), ts);
+                }, 1), true);
                 assert.strictEqual(sum , 6);
             });
             it('should create a test composible with collapae', function()  {

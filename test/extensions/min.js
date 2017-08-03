@@ -20,11 +20,15 @@ multi('../src/index.js', '../type-mark.min.js', function(type) {
             'max'       : false,
             'min'       : true
         });
-
-        it('should have an error message specifying the minimum value', function() {
+        it('should throw an error if it not passed a number', function() {
             assert.throws(function() {
-                type(-101).assert.min(0);
-            }, /TypeError: Expected a value greater than or equal to 0 instead found -101/);
+                type({}).min('string');
+            });
+        });
+        it('should throw an error with the minimum value', function() {
+            assert.throws(function() {
+                type(-0.379).assert.min(0);
+            }, /TypeError: Asserted: min 0 -- Found: number -0.379/);
         });
     });
 });

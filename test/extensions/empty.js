@@ -16,5 +16,21 @@ multi('../src/index.js', '../type-mark.min.js', function(type) {
             'empty'     : true,
             'notEmpty'  : false
         });
+        it('should give an error message showing the length of an array', function() {
+            assert.throws(function() {
+                type([1, 2, 3]).assert.empty();
+            }, /TypeError: Asserted: empty -- Found: object lengthof 3/);
+        });
+        it('should give an error message showing the length of a string', function() {
+            assert.throws(function() {
+                type('test').assert.empty();
+            }, /TypeError: Asserted: empty -- Found: string lengthof 4/);
+        });
+        it('should give an error message showing the length as undefined for non enumerable types', function() {
+            assert.throws(function() {
+                type(12).assert.empty();
+            }, /TypeError: Asserted: empty -- Found: number lengthof undefined/);
+        });
     });
 });
+

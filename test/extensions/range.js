@@ -20,11 +20,15 @@ multi('../src/index.js', '../type-mark.min.js', function(type) {
             'range'     : true,
             'notRange'  : false
         });
-
-        it('should have an error message specifying the range', function() {
+        it('should throw an error if it not passed numbers', function() {
             assert.throws(function() {
-                type(12).assert.range(0, 10);
-            }, /TypeError: Expected a value between 0 and 10 instead found 12/);
+                type({}).lengthof('string', []);
+            });
+        });
+        it('should throw an error with the minimum and maximum values', function() {
+            assert.throws(function() {
+                type(200).assert.range(0, 100);
+            }, /TypeError: Asserted: between 0 and 100 -- Found: number 200/);
         });
     });
 });

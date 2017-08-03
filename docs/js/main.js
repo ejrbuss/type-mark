@@ -2,7 +2,6 @@
 // http://stackoverflow.com/questions/17534661/make-anchor-link-go-some-pixels-above-where-its-linked-to
 function offsetAnchor() {
     if(location.hash.length !== 0) {
-        console.log('Allo!');
         window.scrollTo(window.scrollX, window.scrollY - 62);
     }
 }
@@ -15,21 +14,7 @@ $(document).on('click', 'a[href^="#"]', function(event) {
 $(document).ready(function() {
 
     // Initialize code highlighting
-    $('pre code').each(function(_, block) {
-        var $this = $(this);
-        var lang  = $this
-            .parent()
-            .parent()
-            .attr('class')
-            .replace(/highlighter[^\s]*|language-|\s/g, '');
-        $this
-            .addClass(lang.replace('js', 'javascript'))
-            .parent()
-            .addClass('code')
-            .attr('data-lang', lang);
-
-        hljs.highlightBlock(block);
-    });
+    $('pre code').each(highlight);
 
     // Automatically fill nav
     var $sideNav = $('#side-nav .nav');
@@ -138,6 +123,22 @@ function activate(elem) {
             $ul.hide();
         }
     });
+}
+
+function highlight(_, block) {
+    var $this = $(this);
+    var lang  = $this
+        .parent()
+        .parent()
+        .attr('class')
+        .replace(/highlighter[^\s]*|language-|\s/g, '');
+    $this
+        .addClass(lang.replace('js', 'javascript'))
+        .parent()
+        .addClass('code')
+        .attr('data-lang', lang);
+
+    hljs.highlightBlock(block);
 }
 
 console.log('Try out type-mark out in the console!\n> type(4).string');

@@ -68,7 +68,7 @@ type.extendfn('re', function(regex, arg) {
 ##### Usage
 
 There are a variety of ways we might use this new test. For simple patterns
-we can use the standard api.
+we can use the standard API.
 
 ```js
 > type('aaaab').re(/a+b/)
@@ -87,7 +87,7 @@ var reUrl = /^(https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)*\/?$/;
 type.extend('url', type.re(reUrl));
 ```
 
-We can now validate urls using the standard type-mark api, as well as use it
+We can now validate urls using the standard type-mark API, as well as use it
 in interfaces. For instance you could define an interface like so
 
 ```js
@@ -183,7 +183,7 @@ arguments (hence why we concat value to the end of arguments). Even the `not`
 modifier must use `apply` to achieve this.
 
 Now that we've broken down nest, all we have to do is write our modifier, which
-is as easy as calling the right part of type-mark's api and then returning a call
+is as easy as calling the right part of type-mark's API and then returning a call
 to `nest`.
 
 ```js
@@ -1054,7 +1054,7 @@ true
 ### Util
 
 type-mark comes packed with a small utility library for common tasks needed
-elsewhere by the api.
+elsewhere by the API.
 
 #### `.util.define(obj : object, name : string, fn : function)`
 

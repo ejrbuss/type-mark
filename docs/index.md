@@ -25,7 +25,7 @@ Not to mention the added benefits of [modifiers](#modifiers), [interfaces](#inte
 
 ### Considerations
 
-type-mark is a **dependency free** library clocking in at about ~8.5kb. In
+type-mark is a **dependency free** library clocking in at ~8.5kB. In
 terms of browser compatibility you will be safe in the following browser
 versions based on [MDN](https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_Objects/Object/defineProperty).
 
@@ -70,7 +70,7 @@ var type = require('type-mark');
 
 #### From Scratch
 
-You can also clone the git repository if you want the full source or are
+You can also clone the Git repository if you want the full source or are
 interested in making modifications. type-check is dependency free so working
 with it is as easy as cloning.
 
@@ -87,7 +87,7 @@ following global dependencies
 - [uglify-js](https://www.npmjs.com/package/uglify-js) and
 - [jekyll/bundle](https://jekyllrb.com/).
 
-The following npm scripts are made avaialble
+The following npm scripts are made available
 
 ```bash
 $ npm run test     # run tests and code coverage
@@ -136,7 +136,7 @@ The following checks can be made using either syntax.
 | `type(x).symbol` | Check if `x` is a symbol |
 | `type(x).array` | Check if `x` is an array |
 | `type(x).empty` | Check if `x` is empty[1] |
-| `type(x).exists` | Check `x` is not `null` or `undefined` |
+| `type(x).exists` | Check if `x` is not `null` or `undefined` |
 
 [1] *Works for `strings`, `arrays`, and `objects` based on keys*
 
@@ -221,7 +221,7 @@ checks that `x` is **not** a string. Can also be called
 
 ##### `assert`
 
-If the given check fails a `TypeError` is thrown with a message indicating why
+If the given check fails, a `TypeError` is thrown with a message indicating why
 the check failed. For example
 
 ```js
@@ -251,7 +251,7 @@ Uncaught TypeError: Oops I got undefined
 ##### `arrayof`
 
 Rather than checking the given value this instead checks the elements of the given
-Value. Automatically fails if the passed value is not an Array. The following
+value. Automatically fails if the passed value is not an Array. The following
 example asserts that `x` is an array of numbers.
 
 ```js
@@ -266,7 +266,7 @@ Can also be called
 
 ##### `of`
 
-Rather than checking the passed value checks the properties of the passed value.
+Rather than checking the passed value, checks the properties of the passed value.
 Automatically fails if the passed value is not an object. Note
 that this means `of` works as expected with arrays as well. The following
 example asserts that `x` is an object whose properties are all strings.
@@ -353,7 +353,7 @@ true
 ```
 
 A couple of things to note about this example. First notice that `a` fails the
-check even though only one of it properties is incorrect. `age` is a float rather
+check even though only one of its properties is incorrect. `age` is a float rather
 than an integer. Also `b` succeeds the check even though it contains additional
 data `coordinates.flag`. The `implements` check does not care if the object it
 received contains additional properties.
@@ -371,9 +371,8 @@ var nestedInterface = {
 ```
 
 is a valid interface that checks if the supplied object contains a property
-coordinates that is an array of `{x, y}` objects. This is possible because
-interfaces are just a composed set of validation functions, and because
-`type.implements(interface)` returns a function it can also be used.
+coordinates that is an array of `{x, y}` objects. Interfaces are just a composed set of validation functions. Because
+`type.implements(interface)` returns a function it can also be used for validation.
 
 This also means that you can provide whatever function to the interface you
 would like, for instance
@@ -391,13 +390,13 @@ when combined with custom tests described in the next section.
 
 #### Writing Your Own Tests
 
-type-mark provides two functions for adding tests `extend` and `extendfn`. The
-first allows you to define simple property based checks, the second allows for
+type-mark provides two functions for adding tests: `extend` and `extendfn`. The
+first allows you to define simple property-based checks, the second allows for
 curryable functions.
 
 ##### `extend`
 
-Creates a new property based check.
+Creates a new property-based check.
 
 ```js
 type.extend('nameOfTest', function test(value) {
@@ -411,10 +410,10 @@ The first argument passed to `extend` is the name of the test, which will be
 used for the default error message as well as defining all the access points
 ie. `type(x).name`, `type.not.name`, etc.
 
-The second argument passed to `extend` is the test function itself, it receives
+The second argument passed to `extend` is the test function itself. It receives
 the value currently being tested and is expected to return a boolean result.
-It is also executed in the context of the `TypeState` object (as `this`) it is being
-called on. This gives you access to information such as the user specified
+It is also executed in the context of the `TypeState` object it is being
+called on (as `this`). This gives you access to information such as the user specified
 message, the currently set modidfiers, and more. see the
 [API]({{ "/api" | relative_url }}) for all the details.
 
@@ -451,7 +450,7 @@ true
 
 #### `extendfn`
 
-Creates a new function based check. Takes the same arguments as `extend`
+Creates a new function-based check. Takes the same arguments as `extend`
 except it will be passed any number of specified arguments prior to the actual
 value being tested. For example, lets create a validation function that asserts
 that three numbers sum to 100.

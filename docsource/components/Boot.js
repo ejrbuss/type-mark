@@ -27,6 +27,6 @@ export default ({
         <link rel='stylesheet' href='/static/css/font-awesome.min.css' />
         <link rel='stylesheet' href='/static/css/animate.css' />
         {/* TypeMark */}
-        <script src='/static/type-mark.js' />
-        <script src='/static/docs.js' />
+        <script src={Vars.sitePrefix + '/static/type-mark.js'} />
+        <script src={Vars.sitePrefix + '/static/docs.js'} />
     </Head>;

@@ -1,0 +1,6 @@
+{
+    layout: '../layouts/Docs',
+    title: 'TypeMark',
+    subtitle: 'make type checking *lovely*',
+    version: 'v2.0.0',
+}

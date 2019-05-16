@@ -33,6 +33,7 @@ ratings:
 exclude_paths:
 - test/
 - docs/
+- docsource/
 - src/extensions.js
 - src/modifiers.js
 - ./type-mark.js

@@ -26,7 +26,7 @@ export default ({ pageName }) => {
                     showScrollMarker
                     showSearch
                     leftLinks={<Places home />}
-                    rightLinks={<a href={Vars.github} className='p-md subtle-accent'>
+                    rightLinks={<a target='_blank' href={Vars.github} className='p-md subtle-accent'>
                         <i className='fab fa-github fa-lg' />
                     </a>}
                 />

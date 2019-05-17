@@ -6,7 +6,14 @@ export default class Page {
 
     constructor(data) {
         Object.assign(this, data);
-        this.date = new Date(this.date);
+        if (this.date) {
+            const [month, day, year] = this.date.split('-');
+            this.date = new Date(
+                parseInt(year, 10), 
+                parseInt(month, 10) - 1,
+                parseInt(day, 10),
+            );
+        }
     }
 
     $search(searchText) {
@@ -41,8 +48,10 @@ export default class Page {
                     __html: line.replace(regex, `<mark>$1</mark>`) + '...',
                 }} />)
                 if (previews.length === MAX_PREVIEWS) {
-                    previews.push(`${previews.length - MAX_PREVIEWS} more results...`);
-                    return previews;
+                    previews.push(<span dangerouslySetInnerHTML={{
+                        __html: '<i>Some results have been hidden</i>.',
+                    }} />);
+                    break;
                 }
             }
         }
@@ -50,15 +59,21 @@ export default class Page {
     }
 
     get $day() {
-        return this.date.getUTCDate();
+        if (this.date) { 
+            return this.date.getUTCDate();
+        }
     }
 
     get $month() {
-        return this.date.getUTCMonth();
+        if (this.date) {
+            return this.date.getUTCMonth();
+        }
     }
 
     get $year() {
-        return this.date.getUTCFullYear();
+        if (this.date) {
+            return this.date.getUTCFullYear();
+        }
     }
 
     get $formattedDate() {

@@ -147,17 +147,38 @@ var _jsxFileName = "/Users/ejrbuss/GitHub/type-mark/docsource/components/Boot.js
     },
     __self: this
   }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("script", {
-    src: "/static/type-mark.js",
+    src: "/static/js/es5-shim.min.js",
     __source: {
       fileName: _jsxFileName,
       lineNumber: 30
     },
     __self: this
   }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("script", {
-    src: "/static/docs.js",
+    src: "/static/js/es6-shim.min.js",
     __source: {
       fileName: _jsxFileName,
       lineNumber: 31
+    },
+    __self: this
+  }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("script", {
+    src: "/static/js/object-shim.js",
+    __source: {
+      fileName: _jsxFileName,
+      lineNumber: 32
+    },
+    __self: this
+  }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("script", {
+    src: _Vars__WEBPACK_IMPORTED_MODULE_2___default.a.sitePrefix + '/static/js/type-mark.js',
+    __source: {
+      fileName: _jsxFileName,
+      lineNumber: 34
+    },
+    __self: this
+  }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("script", {
+    src: _Vars__WEBPACK_IMPORTED_MODULE_2___default.a.sitePrefix + '/static/js/docs.js',
+    __source: {
+      fileName: _jsxFileName,
+      lineNumber: 35
     },
     __self: this
   }));
@@ -919,6 +940,7 @@ var _jsxFileName = "/Users/ejrbuss/GitHub/type-mark/docsource/components/Love.js
     },
     __self: this
   }), " using ", react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
+    target: "_blank",
     href: "https://nextjs.org/",
     className: "subtle",
     __source: {
@@ -927,6 +949,7 @@ var _jsxFileName = "/Users/ejrbuss/GitHub/type-mark/docsource/components/Love.js
     },
     __self: this
   }, "Nextjs"), ", ", react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
+    target: "_blank",
     href: "https://picturepan2.github.io/spectre/index.html",
     className: "subtle",
     __source: {
@@ -935,6 +958,8 @@ var _jsxFileName = "/Users/ejrbuss/GitHub/type-mark/docsource/components/Love.js
     },
     __self: this
   }, "Spectre.css"), ", & ", react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
+    target: "_blank",
+    href: "/blog/siteHistory",
     className: "subtle",
     __source: {
       fileName: _jsxFileName,
@@ -1415,6 +1440,7 @@ var _jsxFileName = "/Users/ejrbuss/GitHub/type-mark/docsource/components/SocialM
 /* harmony default export */ __webpack_exports__["default"] = (function (_ref) {
   var accent = _ref.accent;
   return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react__WEBPACK_IMPORTED_MODULE_0___default.a.Fragment, null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
+    target: "_blank",
     href: "https://www.linkedin.com/in/ejrbuss/",
     className: "p-md subtle".concat(accent ? '-accent' : ''),
     __source: {
@@ -1430,6 +1456,7 @@ var _jsxFileName = "/Users/ejrbuss/GitHub/type-mark/docsource/components/SocialM
     },
     __self: this
   })), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
+    target: "_blank",
     href: "https://github.com/ejrbuss",
     className: "p-md subtle".concat(accent ? '-accent' : ''),
     __source: {
@@ -1445,6 +1472,7 @@ var _jsxFileName = "/Users/ejrbuss/GitHub/type-mark/docsource/components/SocialM
     },
     __self: this
   })), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
+    target: "_blank",
     href: "https://twitter.com/ejrbuss",
     className: "p-md subtle".concat(accent ? '-accent' : ''),
     __source: {
@@ -1535,6 +1563,7 @@ function _extends() { _extends = Object.assign || function (target) { for (var i
       __self: this
     }),
     rightLinks: react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
+      target: "_blank",
       href: _Vars__WEBPACK_IMPORTED_MODULE_10___default.a.github,
       className: "p-md subtle-accent",
       __source: {
@@ -1645,6 +1674,14 @@ function _iterableToArray(iter) { if (Symbol.iterator in Object(iter) || Object.
 
 function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = new Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } }
 
+function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _nonIterableRest(); }
+
+function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance"); }
+
+function _iterableToArrayLimit(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
+
+function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
+
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
@@ -1661,7 +1698,16 @@ function () {
     _classCallCheck(this, Page);
 
     Object.assign(this, data);
-    this.date = new Date(this.date);
+
+    if (this.date) {
+      var _this$date$split = this.date.split('-'),
+          _this$date$split2 = _slicedToArray(_this$date$split, 3),
+          month = _this$date$split2[0],
+          day = _this$date$split2[1],
+          year = _this$date$split2[2];
+
+      this.date = new Date(parseInt(year, 10), parseInt(month, 10) - 1, parseInt(day, 10));
+    }
   }
 
   _createClass(Page, [{
@@ -1712,14 +1758,23 @@ function () {
               },
               __source: {
                 fileName: _jsxFileName,
-                lineNumber: 40
+                lineNumber: 47
               },
               __self: this
             }));
 
             if (previews.length === MAX_PREVIEWS) {
-              previews.push("".concat(previews.length - MAX_PREVIEWS, " more results..."));
-              return previews;
+              previews.push(react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", {
+                dangerouslySetInnerHTML: {
+                  __html: '<i>Some results have been hidden</i>.'
+                },
+                __source: {
+                  fileName: _jsxFileName,
+                  lineNumber: 51
+                },
+                __self: this
+              }));
+              break;
             }
           }
         }
@@ -1743,17 +1798,23 @@ function () {
   }, {
     key: "$day",
     get: function get() {
-      return this.date.getUTCDate();
+      if (this.date) {
+        return this.date.getUTCDate();
+      }
     }
   }, {
     key: "$month",
     get: function get() {
-      return this.date.getUTCMonth();
+      if (this.date) {
+        return this.date.getUTCMonth();
+      }
     }
   }, {
     key: "$year",
     get: function get() {
-      return this.date.getUTCFullYear();
+      if (this.date) {
+        return this.date.getUTCFullYear();
+      }
     }
   }, {
     key: "$formattedDate",
@@ -1934,8 +1995,22 @@ var useSearch = function useSearch() {
   var _useState7 = Object(react__WEBPACK_IMPORTED_MODULE_0__["useState"])([]),
       _useState8 = _slicedToArray(_useState7, 2),
       results = _useState8[0],
-      setResults = _useState8[1];
+      setResults = _useState8[1]; // Add event listener
 
+
+  Object(react__WEBPACK_IMPORTED_MODULE_0__["useEffect"])(function () {
+    var keyPress = function keyPress(e) {
+      // On escape
+      if (e.keyCode === 27) {
+        setOpen(false);
+      }
+    };
+
+    document.addEventListener('keydown', keyPress);
+    return function () {
+      document.removeEventListener('keydown', keyPress);
+    };
+  }, []);
   return {
     open: open,
     search: search,
